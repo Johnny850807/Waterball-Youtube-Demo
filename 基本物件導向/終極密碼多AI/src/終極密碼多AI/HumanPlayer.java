@@ -1,7 +1,5 @@
 package ²×·¥±K½X¦hAI;
 
-import Util.Input;
-
 public class HumanPlayer extends Player{
 
 	@Override
