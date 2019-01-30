@@ -62,9 +62,39 @@
 
 
 
-## 企劃 2: BOW 計畫
+## (3/1~5/1) BOW 計畫
 
 // TODO
 
+## (2-25~) 碩考分享系列 - 資料結構與演算法
 
-## 技術影片
+由於本人在2/25之後結束碩士考試，對於碩考我有無數的心得，
+但礙於版面太長所以只分享資料結構與演算法的部分吧！哈哈！趁記憶猶新時，
+把那些對考生們棘手的部分來用我一貫直白的方式講解清楚，
+不然有太多部分需要考生們在CLRS原文書裡面翻翻找找，或者只能接受不同語言的影片，實在是辛苦。
+
+- 資料結構
+
+- 演算法
+    - Pattern Matching
+      - [ ] Naive v.s. Rabin Karp
+      - [ ] Automata
+      - [ ] KMP
+      
+## 預計推出之項目 
+
+- 技術
+  - [ ] Redis 
+  - [ ] ElasticSearch
+  - [ ] mongodb
+  - [ ] MySQL
+- 開源項目帶領閱讀
+  - Java
+    - [ ] EEFighter (自寫專案)
+    - [ ] 1A2B Online Backend (自寫專案)
+    - [ ] Jedis (Java + Redis)
+    - [ ] FXGL (Java 2D game engine)
+    - [ ] Maple Story V113 Server
+  - C
+    - [ ] SQLite Database 
+
