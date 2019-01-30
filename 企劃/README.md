@@ -93,20 +93,31 @@
         - [ ] Optimal binary search tree
         - [ ] Minimum Edit Distance
     - Graph
+        - [ ] DFS / BFS
         - [ ] Kruskal's algor
         - [ ] Prim's algor
         - [ ] Strong connected commponent
         - [ ] Maximum flow - minimum cut
         - [ ] Articulation point detection
+        - [ ] Topological Sort
         - [ ] Dijkstra's algor
         - [ ] Bellman-Ford's algor
         - [ ] Floyd-Warshall's algor
         - [ ] Johnson's algor
         - [ ] A*
+    - Geometry
+        - [ ] Find Ranks
+        - [ ] Dominating Set
+        - [ ] Minimum pair
+        - [ ] Convex Hull
     - Pattern Matching
         - [ ] Naive v.s. Rabin Karp
         - [ ] Automata
         - [ ] KMP
+    - Others
+        - Amortized Analysis
+            - [ ] Aggregate Method / Accounting method / Potential Method
+     
         
 ## 預計推出之項目 
 
@@ -122,6 +133,8 @@
         - [ ] Jedis (Java + Redis)
         - [ ] FXGL (Java 2D game engine)
         - [ ] Maple Story V113 Server
+    - C#
+        - [ ] MCU Rollcall
     - C
         - [ ] SQLite Database 
 
