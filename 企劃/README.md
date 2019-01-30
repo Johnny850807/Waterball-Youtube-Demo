@@ -2,7 +2,7 @@
 
 **有想看的主題或是企劃可以發到Issue區唷 :) (趁我還是學生時趕緊來狂一波阿)**
 
-## (2/25~) Java 專案賞金之王 (成為軟體架構之王吧！) 
+## (2019/2/25~) Java 專案賞金之王 (成為軟體架構之王吧！) 
 
 我會以這個企劃為主，來經營我的頻道。
 
@@ -46,8 +46,7 @@
 
 這段冒險會很長，而我也盡量會設計好路線，讓每個同學可以參考且選擇有興趣的路線。
 
-
-
+**(設計中)**
 - 一轉：Java基本語法
 // TODO
 
@@ -59,42 +58,82 @@
 // TODO
 
 
-
-
-
-## (3/1~5/1) BOW 計畫
-
-// TODO
-
-## (2-25~) 碩考分享系列 - 資料結構與演算法
+## (2019/2/25~) 資料結構與演算法
 
 由於本人在2/25之後結束碩士考試，對於碩考我有無數的心得，
-但礙於版面太長所以只分享資料結構與演算法的部分吧！哈哈！趁記憶猶新時，
-把那些對考生們棘手的部分來用我一貫直白的方式講解清楚，
-不然有太多部分需要考生們在CLRS原文書裡面翻翻找找，或者只能接受不同語言的影片，實在是辛苦。
+但礙於版面太長所以只分享資料結構與演算法的部分吧！哈哈！
+趁記憶猶新時，把那些對考生們棘手的部分來用我一貫直白的方式講解清楚，
+不然有太多部分需要考生們在CLRS原文書裡面翻翻找找，或者只能接受不同方言的影片，實在是辛苦。
 
 - 資料結構
-
+    - [ ] Stack
+    - [ ] Queue
+    - [ ] Linked-List
+    - [ ] Disjoint set
+    - [ ] Binary Search Tree
+    - [ ] Binary Heap
+    - [ ] Fibonacci Tree
+  
 - 演算法
+    - Searching
+        - [ ] Linear / Binary Search
+        - [ ] Interpolation Search
+        - [ ] The Selection problem (Medium of Mediums)
+    - Sorting
+        - [ ] Selection Sort / Insertion Sort / Bubble Sort 
+        - [ ] Merge Sort
+        - [ ] Quick Sort
+        - [ ] Heap Sort
+        - [ ] Counting Sort
+        - [ ] Redix Sort
+    - Dynamic Programming
+        - [ ] Fractional & 0/1 Knapsack problem (+ Subset Sum)
+        - [ ] Longest Common Sequence
+        - [ ] 2 Sequences Alignment
+        - [ ] Optimal binary search tree
+        - [ ] Minimum Edit Distance
+    - Graph
+        - [ ] Kruskal's algor
+        - [ ] Prim's algor
+        - [ ] Strong connected commponent
+        - [ ] Maximum flow - minimum cut
+        - [ ] Articulation point detection
+        - [ ] Dijkstra's algor
+        - [ ] Bellman-Ford's algor
+        - [ ] Floyd-Warshall's algor
+        - [ ] Johnson's algor
+        - [ ] A*
     - Pattern Matching
-      - [ ] Naive v.s. Rabin Karp
-      - [ ] Automata
-      - [ ] KMP
-      
+        - [ ] Naive v.s. Rabin Karp
+        - [ ] Automata
+        - [ ] KMP
+        
 ## 預計推出之項目 
 
 - 技術
-  - [ ] Redis 
-  - [ ] ElasticSearch
-  - [ ] mongodb
-  - [ ] MySQL
+    - [ ] Redis 
+    - [ ] ElasticSearch
+    - [ ] mongodb
+    - [ ] MySQL
 - 開源項目帶領閱讀
-  - Java
-    - [ ] EEFighter (自寫專案)
-    - [ ] 1A2B Online Backend (自寫專案)
-    - [ ] Jedis (Java + Redis)
-    - [ ] FXGL (Java 2D game engine)
-    - [ ] Maple Story V113 Server
-  - C
-    - [ ] SQLite Database 
+    - Java
+        - [ ] EEFighter (自寫專案)
+        - [ ] 1A2B Online Backend (自寫專案)
+        - [ ] Jedis (Java + Redis)
+        - [ ] FXGL (Java 2D game engine)
+        - [ ] Maple Story V113 Server
+    - C
+        - [ ] SQLite Database 
 
+## Side Projects
+
+此區域的專案是我與團隊即將要開發的開源專案，
+由於涉及到大型專案以及分工，因此也(可能)希望將過程分享給各位同學們。
+
+### (2019/3/1~2019/5/1) BOW 計畫
+
+// TODO
+
+### (2019/2/25~2019/8/1) Taiwan Dixit
+
+//TODO 
