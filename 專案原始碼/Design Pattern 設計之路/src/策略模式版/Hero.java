@@ -1,26 +1,6 @@
-/* MIT License
-Copyright (c) 2018 WaterBall
+package 策略模式版;
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-==========================*/
-
-package 初版;
+import 初版.MpNotEnoughException;
 
 public class Hero {
     private String name; // 名子
@@ -31,43 +11,14 @@ public class Hero {
     private int defense = 50; //防禦力
     private Skill skill;
 
-    public enum Skill {
-        COLLIDING("衝撞"), WATERBALL("水球");
-
-        private String name;
-
-        Skill(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
     public Hero(String name, Skill skill) {
         this.name = name;
         this.skill = skill;
     }
 
-
     public void attack(Hero attackedHero) {
-        int injury = 0;
-
-        switch (skill)
-        {
-            case COLLIDING:
-                injury = getStrength() - attackedHero.getDefense();
-                break;
-            case WATERBALL:
-                lostMp(5);
-                injury = getWisdom()*2;
-                break;
-        }
-
+        int injury = getSkill().attack(this, attackedHero);
         System.out.printf("%s 使用了 %s，傷害值為 %d。\n", getName(), skill, injury);
-        attackedHero.lostHp(injury);
         System.out.printf("%s 的Hp剩下 %d。\n", attackedHero.getName(), attackedHero.getHp());
     }
 
@@ -75,11 +26,11 @@ public class Hero {
         return hp > 0;
     }
 
-    private void lostHp(int hp) {
+    public void lostHp(int hp) {
         setHp(getHp() - hp);
     }
 
-    private void lostMp(int mp) {
+    public void lostMp(int mp) {
         if (getMp() < mp)
             throw new MpNotEnoughException();
         setMp(getMp() - mp);
