@@ -1,4 +1,3 @@
-
 package 策略模式版;
 
 public class Waterball implements Skill {

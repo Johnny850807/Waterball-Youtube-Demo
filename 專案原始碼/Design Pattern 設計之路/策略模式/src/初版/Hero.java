@@ -2,6 +2,8 @@
 
 package 初版;
 
+import commons.MpNotEnoughException;
+
 public class Hero {
     private String name; // 名子
     private int hp = 500;  //生命
@@ -12,18 +14,7 @@ public class Hero {
     private Skill skill;
 
     public enum Skill {
-        COLLIDING("衝撞"), WATERBALL("水球");
-
-        private String name;
-
-        Skill(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+        COLLIDING, WATERBALL, A, B, C, D, E, F, G, H
     }
 
     public Hero(String name, Skill skill) {
@@ -31,28 +22,30 @@ public class Hero {
         this.skill = skill;
     }
 
-
-    public void attack(Hero attackedHero) {
-        int injury = 0;
-
-        switch (skill)
-        {
+    public void attack(Hero targetHero) {
+        switch (skill) {
             case COLLIDING:
-                injury = getStrength() - attackedHero.getDefense();
+                System.out.println("%s 使用了 衝撞攻擊。");
+                targetHero.lostHp(getStrength() - targetHero.getDefense());
                 break;
             case WATERBALL:
+                System.out.println("%s 使用了 水球攻擊。");
                 lostMp(5);
-                injury = getWisdom()*2;
+                targetHero.lostHp(getWisdom() * 2);
+                break;
+            case A:
+                /**
+                 * 新增絕招A
+                 */
+                break;
+            case B:
+                /**
+                 * 新增絕招B
+                 */
                 break;
         }
 
-        System.out.printf("%s 使用了 %s，傷害值為 %d。\n", getName(), skill, injury);
-        attackedHero.lostHp(injury);
-        System.out.printf("%s 的Hp剩下 %d。\n", attackedHero.getName(), attackedHero.getHp());
-    }
-
-    public boolean isAlive() {
-        return hp > 0;
+        System.out.printf("%s 的Hp剩下 %d。\n", targetHero.getName(), targetHero.getHp());
     }
 
     private void lostHp(int hp) {
@@ -63,6 +56,10 @@ public class Hero {
         if (getMp() < mp)
             throw new MpNotEnoughException();
         setMp(getMp() - mp);
+    }
+
+    public boolean isAlive() {
+        return hp > 0;
     }
 
     public String getName() {

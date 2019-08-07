@@ -1,6 +1,6 @@
 package 策略模式版;
 
-import 初版.MpNotEnoughException;
+import commons.MpNotEnoughException;
 
 public class Hero {
     private String name; // 名子
@@ -16,10 +16,12 @@ public class Hero {
         this.skill = skill;
     }
 
-    public void attack(Hero attackedHero) {
-        int injury = getSkill().attack(this, attackedHero);
-        System.out.printf("%s 使用了 %s，傷害值為 %d。\n", getName(), skill, injury);
-        System.out.printf("%s 的Hp剩下 %d。\n", attackedHero.getName(), attackedHero.getHp());
+    public void attack(Hero targetHero) {
+        int injury = skill.attack(this, targetHero);
+        System.out.printf("%s 使用了 %s，傷害值為 %d。\n",
+                getName(), skill, injury);
+        System.out.printf("%s 的Hp剩下 %d。\n", targetHero.getName(),
+                targetHero.getHp());
     }
 
     public boolean isAlive() {
@@ -50,6 +52,7 @@ public class Hero {
 
     public void setHp(int hp) {
         this.hp = hp;
+
         if (!isAlive())
             System.out.printf("%s 已陣亡。\n", getName());
     }
@@ -86,11 +89,8 @@ public class Hero {
         this.defense = defense;
     }
 
-    public Skill getSkill() {
-        return skill;
-    }
-
     public void setSkill(Skill skill) {
         this.skill = skill;
     }
+
 }
