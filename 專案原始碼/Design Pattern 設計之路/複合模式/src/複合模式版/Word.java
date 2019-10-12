@@ -1,6 +1,6 @@
 package 複合模式版;
 
-public class Word implements SearchedItem {
+public class Word implements SearchableItem {
     private String name;
 
     public Word(String name) {

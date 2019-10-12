@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private List<SearchedItem> favoriteItems = new ArrayList<>();
+    private List<SearchableItem> favoriteItems = new ArrayList<>();
 
-    public void addFavorite(SearchedItem searchedItem) {
-        favoriteItems.add(searchedItem);
+    public void addFavorite(SearchableItem searchableItem) {
+        favoriteItems.add(searchableItem);
     }
 
-    public void removeFavorite(SearchedItem searchedItem) {
-        favoriteItems.remove(searchedItem);
+    public void removeFavorite(SearchableItem searchableItem) {
+        favoriteItems.remove(searchableItem);
     }
 
     public void searchWord(String key) {
-        for (SearchedItem favoriteItem : favoriteItems) {
+        for (SearchableItem favoriteItem : favoriteItems) {
             favoriteItem.search(key);
         }
     }
