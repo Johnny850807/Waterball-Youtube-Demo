@@ -2,22 +2,26 @@ package 複合模式版;
 
 public class Main {
     public static void main(String[] args) {
-        Dictionary toeic =
-                new StandardDictionary("toeic",
-                    new StandardTopic("supply chain",
-                            new Word("retailer"), new Word("wholesaler"), new Word("manufacturer")));
+        FileSystem distributedFileSystem = new FileSystem("dfs");
+        FileSystem fs1 = new FileSystem("fs1");
+        FileSystem fs2 = new FileSystem("fs2");
 
+        fs1.addChild(new File("JavaIsGreat", "Very good."));
+        fs1.addChild(new File("JavaIsBeautiful", "Very good."));
+        fs1.addChild(new File("JavaIsGreat", "Very good."));
 
-        Topic emotions = new StandardTopic("emotions",
-                                    new Word("sad"), new Word("happy"), new Word("excited"));
+        Directory home = new StandardDirectory("home");
+        fs2.addChild(home);
+        Directory jenkins = new StandardDirectory("jenkins");
+        jenkins.addChild(new File("pipeline", "The pipeline document \n version 1.5"));
+        jenkins.addChild(new File("strategy.txt", "The strategy pattern is trivial."));
+        home.addChild(jenkins);
 
-        User user = new User();
-        user.addFavorite(toeic);
-        user.addFavorite(emotions);
-        user.addFavorite(new Word("waterball"));
+        distributedFileSystem.addChild(fs1);
+        distributedFileSystem.addChild(fs2);
+        distributedFileSystem.addChild(new File("ThankYouSubscriber", "2020/1/5, Please subscribe my channel\n    if you like the videos :)"));
 
-        user.searchWord("e");
+        CommandLineSystem cmd = new CommandLineSystem(distributedFileSystem, distributedFileSystem);
+        cmd.start();
     }
-
 }
-
