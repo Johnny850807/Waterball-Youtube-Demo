@@ -19,19 +19,7 @@ public class User {
     public void addFavorite(Word word) {
         this.favoriteWords.add(word);
     }
-
-    public void removeFavorite(Dictionary dictionary) {
-        this.favoriteDictionaries.remove(dictionary);
-    }
-
-    public void removeFavorite(Topic topic) {
-        this.favoriteTopics.remove(topic);
-    }
-
-    public void removeFavorite(Word word) {
-        this.favoriteWords.remove(word);
-    }
-
+    
     public void searchWord(String key) {
         for (Dictionary dictionary : favoriteDictionaries) {
             System.out.println("- Search in the dictionary " + dictionary.getName() + " ... ");

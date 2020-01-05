@@ -1,6 +1,5 @@
 package 初版;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,13 +19,4 @@ public class Dictionary {
     public List<Topic> getTopics() {
         return topics;
     }
-
-    public List<Word> getWords() {
-        List<Word> words = new ArrayList<>();
-        for (Topic topic : topics) {
-            words.addAll(topic.getWords());
-        }
-        return words;
-    }
-
 }

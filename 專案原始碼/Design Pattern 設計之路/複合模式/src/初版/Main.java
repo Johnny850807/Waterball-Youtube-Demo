@@ -15,7 +15,6 @@ public class Main {
         user.addFavorite(toeic);
         user.addFavorite(emotions);
         user.addFavorite(new Word("waterball"));
-
         user.searchWord("e");
     }
 
