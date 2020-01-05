@@ -7,7 +7,7 @@ public interface Directory extends EntryItem {
     boolean containsItem(String name);
 
     @Override
-    EntryItem locate(String name);
+    EntryItem getChild(String name);
 
     @Override
     List<EntryItem> search(String name);

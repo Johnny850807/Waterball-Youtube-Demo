@@ -5,32 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2df54097-ca0e-43bb-aa1f-53372cc9d995" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/commons/FileSystemException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/Directory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/EntryItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/File.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/FileSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/FileSystemException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/複合模式版/StandardDirectory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/初版/CommandLineSystem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/初版/Directory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/初版/File.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/初版/FileSystemException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/初版/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/複合模式版/Link.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/初版/Dictionary.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/初版/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/初版/Topic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/初版/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/初版/Word.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/Dictionary.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/DictionaryGroup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/複合模式版/Directory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/Directory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/複合模式版/EntryItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/EntryItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/複合模式版/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/File.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/複合模式版/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/PrintUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/SearchableItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/StandardDictionary.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/StandardDictionaryGroup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/StandardTopic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/Topic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/複合模式版/Word.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/複合模式版/StandardDirectory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/複合模式版/StandardDirectory.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,61 +27,19 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/複合模式版/EntryItem.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-54">
-              <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/複合模式版/FileSystem.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="7" column="32" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
-              <folding>
-                <element signature="e#206#207#0" expanded="true" />
-                <element signature="e#233#234#0" expanded="true" />
-                <element signature="e#354#355#0" expanded="true" />
-                <element signature="e#390#391#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/複合模式版/FileSystemException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="9" column="5" lean-forward="true" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-              <folding>
-                <element signature="e#182#183#0" expanded="true" />
-                <element signature="e#212#213#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1566">
-              <caret line="93" column="25" lean-forward="true" selection-start-line="93" selection-start-column="25" selection-end-line="93" selection-end-column="25" />
+            <state relative-caret-position="270">
+              <caret line="25" column="47" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="47" />
               <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3772#3773#0" expanded="true" />
                 <element signature="e#3827#3828#0" expanded="true" />
+                <element signature="e#4033#4034#0" expanded="true" />
+                <element signature="e#4083#4084#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/複合模式版/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="21" column="72" lean-forward="true" selection-start-line="21" selection-start-column="72" selection-end-line="21" selection-end-column="72" />
             </state>
           </provider>
         </entry>
@@ -102,62 +48,60 @@
         <entry file="file://$PROJECT_DIR$/src/複合模式版/StandardDirectory.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="108">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+              <caret line="6" column="30" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="30" />
               <folding>
-                <element signature="e#323#324#0" expanded="true" />
-                <element signature="e#358#359#0" expanded="true" />
+                <element signature="e#1436#1437#0" expanded="true" />
                 <element signature="e#1469#1470#0" expanded="true" />
-                <element signature="e#1549#1550#0" expanded="true" />
-                <element signature="e#1576#1577#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/複合模式版/File.java">
+        <entry file="file://$PROJECT_DIR$/src/複合模式版/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-              <folding>
-                <element signature="e#178#179#0" expanded="true" />
-                <element signature="e#209#210#0" expanded="true" />
-                <element signature="e#235#236#0" expanded="true" />
-                <element signature="e#265#266#0" expanded="true" />
-                <element signature="e#232#233#0" expanded="true" />
-                <element signature="e#264#265#0" expanded="true" />
-                <element signature="e#230#231#0" expanded="true" />
-                <element signature="e#303#304#0" expanded="true" />
-                <element signature="e#428#429#0" expanded="true" />
-                <element signature="e#474#475#0" expanded="true" />
-                <element signature="e#651#652#0" expanded="true" />
-                <element signature="e#724#725#0" expanded="true" />
-                <element signature="e#1160#1161#0" expanded="true" />
-                <element signature="e#1202#1203#0" expanded="true" />
-                <element signature="e#823#824#0" expanded="true" />
-                <element signature="e#850#851#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="531">
+              <caret line="24" column="39" lean-forward="true" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/複合模式版/Link.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="446">
-              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
+            <state relative-caret-position="599">
+              <caret line="58" column="44" selection-start-line="58" selection-start-column="44" selection-end-line="58" selection-end-column="44" />
               <folding>
+                <element signature="e#195#196#0" expanded="true" />
                 <element signature="e#223#224#0" expanded="true" />
-                <element signature="e#255#256#0" expanded="true" />
-                <element signature="e#373#374#0" expanded="true" />
-                <element signature="e#414#415#0" expanded="true" />
-                <element signature="e#136#137#0" expanded="true" />
-                <element signature="e#163#164#0" expanded="true" />
-                <element signature="e#213#214#0" expanded="true" />
-                <element signature="e#240#241#0" expanded="true" />
-                <element signature="e#568#569#0" expanded="true" />
-                <element signature="e#587#588#0" expanded="true" />
+                <element signature="e#416#417#0" expanded="true" />
+                <element signature="e#443#444#0" expanded="true" />
+                <element signature="e#145#146#0" expanded="true" />
+                <element signature="e#173#174#0" expanded="true" />
+                <element signature="e#233#234#0" expanded="true" />
+                <element signature="e#260#261#0" expanded="true" />
+                <element signature="e#324#325#0" expanded="true" />
+                <element signature="e#351#352#0" expanded="true" />
+                <element signature="e#970#971#0" expanded="true" />
+                <element signature="e#1012#1013#0" expanded="true" />
+                <element signature="e#475#476#0" expanded="true" />
+                <element signature="e#502#503#0" expanded="true" />
+                <element signature="e#1169#1170#0" expanded="true" />
+                <element signature="e#1232#1233#0" expanded="true" />
+                <element signature="e#1272#1273#0" expanded="true" />
+                <element signature="e#1305#1306#0" expanded="true" />
+                <element signature="e#1177#1178#0" expanded="true" />
+                <element signature="e#1248#1249#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/複合模式版/EntryItem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="626">
+              <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -168,8 +112,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin File" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -210,28 +154,34 @@
         <option value="$PROJECT_DIR$/src/初版/Dictionary.java" />
         <option value="$PROJECT_DIR$/src/初版/User.java" />
         <option value="$PROJECT_DIR$/src/初版/Test.java" />
-        <option value="$PROJECT_DIR$/src/初版/Main.java" />
         <option value="$PROJECT_DIR$/src/初版/FileSystemException.java" />
-        <option value="$PROJECT_DIR$/src/初版/Directory.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/DistributedFileSystem.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/Directory.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/Directoryy.java" />
-        <option value="$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java" />
-        <option value="$PROJECT_DIR$/src/複合模式版/StandardDirectory.java" />
-        <option value="$PROJECT_DIR$/src/複合模式版/EntryItem.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/StandardFileSystem.java" />
-        <option value="$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/FileSystem.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/File.java" />
+        <option value="$PROJECT_DIR$/src/初版/StandardDirectory.java" />
+        <option value="$PROJECT_DIR$/src/初版/Utils.java" />
+        <option value="$PROJECT_DIR$/src/初版/File.java" />
+        <option value="$PROJECT_DIR$/src/初版/CommandLineSystem.java" />
+        <option value="$PROJECT_DIR$/src/初版/Main.java" />
+        <option value="$PROJECT_DIR$/src/複合模式版/StandardDirectory.java" />
+        <option value="$PROJECT_DIR$/src/初版/Directory.java" />
+        <option value="$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java" />
         <option value="$PROJECT_DIR$/src/複合模式版/Main.java" />
+        <option value="$PROJECT_DIR$/src/複合模式版/Utils.java" />
+        <option value="$PROJECT_DIR$/src/複合模式版/EntryItem.java" />
+        <option value="$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java" />
+        <option value="$PROJECT_DIR$/src/複合模式版/Link.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="134" />
-    <option name="y" value="18" />
-    <option name="width" value="974" />
-    <option name="height" value="1047" />
+    <option name="x" value="80" />
+    <option name="y" value="418" />
+    <option name="width" value="1327" />
+    <option name="height" value="1043" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -257,6 +207,12 @@
               <item name="複合模式" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="commons" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="複合模式" type="b2602c69:ProjectViewProjectNode" />
+              <item name="複合模式" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="初版" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="複合模式" type="b2602c69:ProjectViewProjectNode" />
@@ -290,8 +246,8 @@
       <recent name="初版" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\NativeGit\Youtube-Demo\專案原始碼\Design Pattern 設計之路\複合模式\src\複合模式版" />
       <recent name="D:\NativeGit\Youtube-Demo\專案原始碼\Design Pattern 設計之路\複合模式\src\初版" />
+      <recent name="D:\NativeGit\Youtube-Demo\專案原始碼\Design Pattern 設計之路\複合模式\src\複合模式版" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -411,18 +367,18 @@
       <workItem from="1570872730275" duration="10931000" />
       <workItem from="1570945974701" duration="2875000" />
       <workItem from="1578129609898" duration="4234000" />
-      <workItem from="1578208272755" duration="11854000" />
+      <workItem from="1578208272755" duration="19159000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54200000" />
+    <option name="totallyTimeSpent" value="61505000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1444563" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15298508" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -430,8 +386,8 @@
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.23969631" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.47722343" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.03253796" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.03253796" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -439,7 +395,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Statistic" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.21149674" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.03253796" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -483,12 +439,31 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java</url>
+          <line>110</line>
+          <properties />
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java</url>
+          <line>111</line>
+          <properties />
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java</url>
+          <line>26</line>
+          <properties />
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/P.java" />
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/UnorderedList.java" />
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/ListItem.java" />
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/Html.java" />
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/Image.java" />
     <entry file="file://$PROJECT_DIR$/src/複合模式版/Div.java" />
     <entry file="file://$PROJECT_DIR$/src/初版/P.java" />
     <entry file="file://$PROJECT_DIR$/src/初版/UnorderedList.java" />
@@ -625,43 +600,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/初版/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/初版/FileItem.java">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/初版/File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/初版/CommandLineSystem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/初版/FileSystem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="13" column="37" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/初版/Directory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1107">
-          <caret line="49" column="5" lean-forward="true" selection-start-line="49" selection-start-column="5" selection-end-line="50" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/commons/FileSystemException.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -696,50 +636,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-          <folding>
-            <element signature="e#223#224#0" expanded="true" />
-            <element signature="e#255#256#0" expanded="true" />
-            <element signature="e#373#374#0" expanded="true" />
-            <element signature="e#414#415#0" expanded="true" />
-            <element signature="e#136#137#0" expanded="true" />
-            <element signature="e#163#164#0" expanded="true" />
-            <element signature="e#213#214#0" expanded="true" />
-            <element signature="e#240#241#0" expanded="true" />
-            <element signature="e#568#569#0" expanded="true" />
-            <element signature="e#587#588#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/複合模式版/FileSystem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="2" column="47" lean-forward="true" selection-start-line="2" selection-start-column="47" selection-end-line="3" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/StandardDirectory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding>
-            <element signature="e#323#324#0" expanded="true" />
-            <element signature="e#358#359#0" expanded="true" />
-            <element signature="e#1469#1470#0" expanded="true" />
-            <element signature="e#1549#1550#0" expanded="true" />
-            <element signature="e#1576#1577#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/EntryItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-54">
-          <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -781,20 +681,170 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java">
+    <entry file="file://$PROJECT_DIR$/src/初版/EntryItem.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/Directory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1566">
-          <caret line="93" column="25" lean-forward="true" selection-start-line="93" selection-start-column="25" selection-end-line="93" selection-end-column="25" />
+        <state relative-caret-position="540">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/FileSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="4" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/AbstractEntryItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="2" column="51" selection-start-line="2" selection-start-column="51" selection-end-line="2" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/FileSystemException.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="49" column="5" lean-forward="true" selection-start-line="34" selection-start-column="4" selection-end-line="49" selection-end-column="5" />
           <folding>
-            <element signature="e#3827#3828#0" expanded="true" />
+            <element signature="e#200#201#0" expanded="true" />
+            <element signature="e#230#231#0" expanded="true" />
+            <element signature="e#442#443#0" expanded="true" />
+            <element signature="e#471#472#0" expanded="true" />
+            <element signature="e#502#503#0" expanded="true" />
+            <element signature="e#529#530#0" expanded="true" />
+            <element signature="e#576#577#0" expanded="true" />
+            <element signature="e#612#613#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/Directory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="10" column="59" selection-start-line="10" selection-start-column="59" selection-end-line="10" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2718#2719#0" expanded="true" />
+            <element signature="e#2752#2753#0" expanded="true" />
+            <element signature="e#2794#2795#0" expanded="true" />
+            <element signature="e#2822#2823#0" expanded="true" />
+            <element signature="e#2918#2919#0" expanded="true" />
+            <element signature="e#2945#2946#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/複合模式版/StandardDirectory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="30" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="30" />
+          <folding>
+            <element signature="e#1436#1437#0" expanded="true" />
+            <element signature="e#1469#1470#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/初版/CommandLineSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1863">
+          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/複合模式版/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="21" column="72" lean-forward="true" selection-start-line="21" selection-start-column="72" selection-end-line="21" selection-end-column="72" />
+        <state relative-caret-position="531">
+          <caret line="24" column="39" lean-forward="true" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/複合模式版/CommandLineSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="25" column="47" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3772#3773#0" expanded="true" />
+            <element signature="e#3827#3828#0" expanded="true" />
+            <element signature="e#4033#4034#0" expanded="true" />
+            <element signature="e#4083#4084#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/複合模式版/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="20" lean-forward="true" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/複合模式版/EntryItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="626">
+          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/複合模式版/AbstractEntryItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+          <folding>
+            <element signature="e#181#182#0" expanded="true" />
+            <element signature="e#213#214#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/複合模式版/Link.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="599">
+          <caret line="58" column="44" selection-start-line="58" selection-start-column="44" selection-end-line="58" selection-end-column="44" />
+          <folding>
+            <element signature="e#195#196#0" expanded="true" />
+            <element signature="e#223#224#0" expanded="true" />
+            <element signature="e#416#417#0" expanded="true" />
+            <element signature="e#443#444#0" expanded="true" />
+            <element signature="e#145#146#0" expanded="true" />
+            <element signature="e#173#174#0" expanded="true" />
+            <element signature="e#233#234#0" expanded="true" />
+            <element signature="e#260#261#0" expanded="true" />
+            <element signature="e#324#325#0" expanded="true" />
+            <element signature="e#351#352#0" expanded="true" />
+            <element signature="e#970#971#0" expanded="true" />
+            <element signature="e#1012#1013#0" expanded="true" />
+            <element signature="e#475#476#0" expanded="true" />
+            <element signature="e#502#503#0" expanded="true" />
+            <element signature="e#1169#1170#0" expanded="true" />
+            <element signature="e#1232#1233#0" expanded="true" />
+            <element signature="e#1272#1273#0" expanded="true" />
+            <element signature="e#1305#1306#0" expanded="true" />
+            <element signature="e#1177#1178#0" expanded="true" />
+            <element signature="e#1248#1249#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

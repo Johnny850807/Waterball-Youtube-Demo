@@ -21,7 +21,7 @@ public class StandardDirectory extends AbstractEntryItem implements Directory {
     }
 
     @Override
-    public EntryItem locate(String name) {
+    public EntryItem getChild(String name) {
         for (EntryItem file : getChildren()) {
             if (name.equals(file.getName()))
                 return file;

@@ -1,4 +1,4 @@
-package 複合模式版;
+package 初版;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +12,7 @@ public class CommandLineSystem {
     private final static String GO_BACK_ALIAS = "..";
 
     private Directory root;
-    private EntryItem currentDir;
+    private Directory currentDir;
 
     public CommandLineSystem(Directory root, Directory currentDir) {
         this.root = root;
@@ -34,7 +34,7 @@ public class CommandLineSystem {
                 // (在現今作業系統中就是用了指令模式唷)
                 switch (command) {
                     case "ls":
-                        ls(name);
+                        ls();
                         break;
                     case "cd":
                         cd(name);
@@ -48,9 +48,6 @@ public class CommandLineSystem {
                     case "search":
                         search(name);
                         break;
-                    case "cat":
-                        cat(name);
-                        break;
                     default:
                         System.out.println(command + " command is not found.");
                 }
@@ -62,29 +59,20 @@ public class CommandLineSystem {
         }
     }
 
-    private void ls(String directoryName) {
-        if (directoryName == null)
-            ls(currentDir);
-        else
-            ls(currentDir.getChild(directoryName));
-
-    }
-
-    private void ls(EntryItem listedItem) {
-        if (listedItem instanceof Directory) {
-            Directory dir = (Directory) listedItem;
-            for (EntryItem item : dir.getChildren())
-                System.out.println(item.getName() + " --> " + item.getDisplayType());
+    private void ls() {
+        for (Directory directory : currentDir.getDirectories()) {
+            System.out.println(directory.getName());
         }
-        else
-            System.err.println("The item " + listedItem.getName() + " of type " + listedItem.getDisplayType() +
-                    " does not support the 'ls' command.");
+        for (File file : currentDir.getFiles()) {
+            System.out.println(file.getName());
+        }
     }
+
 
     private void mkdir(String directoryName) {
         if (currentDir.containsItem(directoryName))
             System.err.println("The directory " + directoryName + " has existed.");
-        Directory directory = new StandardDirectory(directoryName);
+        Directory directory = new Directory(directoryName);
         currentDir.addChild(directory);
     }
 
@@ -95,11 +83,6 @@ public class CommandLineSystem {
         currentDir.addChild(file);
     }
 
-    private void mount(FileSystem fileSystem) {
-        if (currentDir.containsItem(fileSystem.getName()))
-            System.err.println("The file system " + fileSystem.getName() + " has existed.");
-        currentDir.addChild(root);
-    }
 
     private void cd(String name) {
         name = name.trim();
@@ -108,30 +91,24 @@ public class CommandLineSystem {
         else if (GO_BACK_ALIAS.equals(name) && currentDir.getParent() != null)
             currentDir = currentDir.getParent();
         else
-            currentDir = currentDir.getChild(name);
+            currentDir = currentDir.getDirectory(name);
     }
 
     private void search(String name) {
-        printItemNames(currentDir.search(name));
+        printFileNames(currentDir.searchFile(name));
+        printDirectoryNames(currentDir.searchDirectories(name));
     }
 
-    private void printItemNames(List<EntryItem> items) {
-        for (EntryItem item : items) {
-            System.out.println(item.getName());
+    private void printFileNames(List<File> files) {
+        for (File file : files) {
+            System.out.println(file.getName());
         }
     }
 
-    private void cat(String fileName) {
-        cat(currentDir.getChild(fileName));
+    private void printDirectoryNames(List<Directory> directories) {
+        for (Directory directory : directories) {
+            System.out.println(directory.getName());
+        }
     }
 
-    private void cat(EntryItem item) {
-        if (item instanceof File)
-            System.out.println(((File) item).getContent());
-        else if (item instanceof Link)
-            cat(((Link) item).getLinkedItem());
-        else
-            System.err.println("The item " + item.getName() + " of type " + item.getDisplayType() +
-                    " does not support the 'ls' command.");
-    }
 }

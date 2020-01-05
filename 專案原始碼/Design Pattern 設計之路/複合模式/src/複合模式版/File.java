@@ -25,7 +25,7 @@ public class File extends AbstractEntryItem {
     }
 
     @Override
-    public EntryItem locate(String name) {
+    public EntryItem getChild(String name) {
         throw new FileSystemException("Only directory can have children.");
     }
 

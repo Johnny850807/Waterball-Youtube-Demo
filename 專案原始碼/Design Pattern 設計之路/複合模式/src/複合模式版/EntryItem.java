@@ -36,7 +36,7 @@ public interface EntryItem {
      * @param name 欲找尋的項目名稱
      * @return 找尋到的項目
      */
-    EntryItem locate(String name);
+    EntryItem getChild(String name);
 
     /**
      * @param name 搜索的檔案名稱
@@ -62,17 +62,5 @@ public interface EntryItem {
     /**
      * @return 取得此項目的路徑
      */
-    default String getPath() {
-        StringBuilder stringBuilder = new StringBuilder();
-        EntryItem entryItem = this;
-        if (entryItem.isRoot())
-            return "\\";
-        // 一路從目前項目節點走訪到父節點一直到根目錄為止
-        while (!entryItem.isRoot()) {
-            stringBuilder.insert(0, entryItem.getName())
-                    .insert(0, "\\");  //附加斜線在開頭
-            entryItem = entryItem.getParent();
-        }
-        return stringBuilder.toString();
-    }
+    String getPath();
 }
