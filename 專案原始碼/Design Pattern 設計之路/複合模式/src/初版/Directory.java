@@ -1,8 +1,9 @@
 package 初版;
 
-import 複合模式版.FileSystem;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 public class Directory {
     private Directory parent;
@@ -14,32 +15,36 @@ public class Directory {
         this.name = name;
     }
 
-    public boolean containsItem(String name) {
-        for (Directory directory : directories) {
-            if (name.equals(directory.getName()))
-                return true;
+    public void addChild(Directory directory) {
+        if (!contains(directory.getName()))
+        {
+            directories.add(directory);
+            directory.setParent(this);
         }
-        for (File file : files) {
-            if (name.equals(file.getName()))
-                return true;
-        }
-        return false;
     }
 
-    public File locateFile(String name) {
+    public void addChild(File file) {
+        if (!contains(file.getName()))
+        {
+            files.add(file);
+            file.setParent(this);
+        }
+    }
+
+    public File getFile(String name) {
         for (File file : getFiles()) {
             if (name.equals(file.getName()))
                 return file;
         }
-        throw new FileSystemException("The file " + name + " is not found.");
+        throw new FileSystemException("The file " + name + " not found.");
     }
 
-    public Directory locateDirectory(String name) {
+    public Directory getDirectory(String name) {
         for (Directory directory : getDirectories()) {
             if (name.equals(directory.getName()))
                 return directory;
         }
-        throw new FileSystemException("The file " + name + " is not found.");
+        throw new FileSystemException("The directory " + name + " not found.");
     }
 
     public List<File> searchFile(String name) {
@@ -68,29 +73,18 @@ public class Directory {
         return results;
     }
 
-    public void addChild(Directory directory) {
-        if (!containsItem(directory.getName()))
-        {
-            directories.add(directory);
-            directory.setParent(this);
-        }
-    }
-
-    public void addChild(File file) {
-        if (!containsItem(file.getName()))
-        {
-            files.add(file);
-            file.setParent(this);
-        }
-    }
-
-    public Directory getDirectory(String name) {
-        for (Directory directory : getDirectories()) {
+    public boolean contains(String name) {
+        for (Directory directory : directories) {
             if (name.equals(directory.getName()))
-                return directory;
+                return true;
         }
-        throw new FileSystemException("The directory " + name + " not found.");
+        for (File file : files) {
+            if (name.equals(file.getName()))
+                return true;
+        }
+        return false;
     }
+
 
     public Collection<Directory> getDirectories() {
         return directories;

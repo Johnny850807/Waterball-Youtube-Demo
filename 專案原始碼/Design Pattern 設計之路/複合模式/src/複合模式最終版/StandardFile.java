@@ -1,20 +1,21 @@
-package 複合模式版;
+package 複合模式最終版;
 
 import java.util.Collections;
 import java.util.List;
 
-public class File extends AbstractItem {
+public class StandardFile extends AbstractItem implements File {
     private String content;
 
-    public File(String name) {
+    public StandardFile(String name) {
         this(name, "");
     }
 
-    public File(String name, String content) {
+    public StandardFile(String name, String content) {
         super(name);
         this.content = content;
     }
 
+    @Override
     public String getContent() {
         return content;
     }

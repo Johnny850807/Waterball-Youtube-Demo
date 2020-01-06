@@ -1,16 +1,33 @@
-package 複合模式版;
+package 複合模式最終版;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Directory extends AbstractItem {
+public class StandardDirectory extends AbstractItem implements Directory {
     private LinkedList<Item> items = new LinkedList<>();
 
-    public Directory(String name) {
+    public StandardDirectory(String name) {
         super(name);
     }
 
+    @Override
+    public boolean contains(String name) {
+        for (Item item : items) {
+            if (name.equals(item.getName()))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Item getChild(String name) {
+        for (Item file : getChildren()) {
+            if (name.equals(file.getName()))
+                return file;
+        }
+        throw new FileSystemException("The file " + name + " is not found.");
+    }
 
     @Override
     public List<Item> search(String name) {
@@ -24,6 +41,7 @@ public class Directory extends AbstractItem {
         return results;
     }
 
+    @Override
     public void addChild(Item child) {
         if (!contains(child.getName()))
         {
@@ -31,22 +49,8 @@ public class Directory extends AbstractItem {
             child.setParent(this);
         }
     }
-    public boolean contains(String name) {
-        for (Item item : items) {
-            if (name.equals(item.getName()))
-                return true;
-        }
-        return false;
-    }
 
-    public Item getChild(String name) {
-        for (Item file : getChildren()) {
-            if (name.equals(file.getName()))
-                return file;
-        }
-        throw new FileSystemException("The file " + name + " is not found.");
-    }
-
+    @Override
     public List<Item> getChildren() {
         return items;
     }

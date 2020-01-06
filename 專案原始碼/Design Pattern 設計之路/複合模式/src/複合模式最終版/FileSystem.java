@@ -1,4 +1,4 @@
-package 複合模式版;
+package 複合模式最終版;
 
 public class FileSystem extends StandardDirectory {
     public FileSystem(String name) {
@@ -6,7 +6,7 @@ public class FileSystem extends StandardDirectory {
     }
     @Override
     public String getDisplayType() {
-        return "File System";
+        return "StandardFile System";
     }
 
 }

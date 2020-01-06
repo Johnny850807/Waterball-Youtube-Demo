@@ -1,15 +1,15 @@
-package 複合模式版;
+package 複合模式最終版;
 
-public abstract class AbstractEntryItem implements EntryItem {
+public abstract class AbstractItem implements Item {
     protected Directory parent;
     protected String name;
 
-    public AbstractEntryItem(String name) {
+    public AbstractItem(String name) {
         this.name = name;
     }
 
     @Override
-    public boolean isRoot() {
+    public boolean hasParent() {
         return parent == null;  //沒有父節點就代表是根目錄
     }
 
@@ -31,14 +31,14 @@ public abstract class AbstractEntryItem implements EntryItem {
     @Override
     public String getPath() {
         StringBuilder stringBuilder = new StringBuilder();
-        EntryItem entryItem = this;
-        if (entryItem.isRoot())
+        Item item = this;
+        if (item.hasParent())
             return "\\";
         // 一路從目前項目節點走訪到父節點一直到根目錄為止
-        while (!entryItem.isRoot()) {
-            stringBuilder.insert(0, entryItem.getName())
+        while (!item.hasParent()) {
+            stringBuilder.insert(0, item.getName())
                     .insert(0, "\\");  //附加斜線在開頭
-            entryItem = entryItem.getParent();
+            item = item.getParent();
         }
         return stringBuilder.toString();
     }

@@ -1,7 +1,5 @@
 package 初版;
 
-import 複合模式版.EntryItem;
-
 public class File {
     private Directory parent;
     private String name;

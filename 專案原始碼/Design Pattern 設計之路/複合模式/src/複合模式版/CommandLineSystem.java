@@ -12,7 +12,7 @@ public class CommandLineSystem {
     private final static String GO_BACK_ALIAS = "..";
 
     private Directory root;
-    private EntryItem currentDir;
+    private Directory currentDir;
 
     public CommandLineSystem(Directory root, Directory currentDir) {
         this.root = root;
@@ -70,10 +70,10 @@ public class CommandLineSystem {
 
     }
 
-    private void ls(EntryItem listedItem) {
+    private void ls(Item listedItem) {
         if (listedItem instanceof Directory) {
             Directory dir = (Directory) listedItem;
-            for (EntryItem item : dir.getChildren())
+            for (Item item : dir.getChildren())
                 System.out.println(item.getName() + " --> " + item.getDisplayType());
         }
         else
@@ -82,41 +82,35 @@ public class CommandLineSystem {
     }
 
     private void mkdir(String directoryName) {
-        if (currentDir.containsItem(directoryName))
+        if (currentDir.contains(directoryName))
             System.err.println("The directory " + directoryName + " has existed.");
-        Directory directory = new StandardDirectory(directoryName);
+        Directory directory = new Directory(directoryName);
         currentDir.addChild(directory);
     }
 
     private void touch(String fileName) {
-        if (currentDir.containsItem(fileName))
+        if (currentDir.contains(fileName))
             System.err.println("The file " + fileName + " has existed.");
         File file = new File(fileName);
         currentDir.addChild(file);
     }
 
-    private void mount(FileSystem fileSystem) {
-        if (currentDir.containsItem(fileSystem.getName()))
-            System.err.println("The file system " + fileSystem.getName() + " has existed.");
-        currentDir.addChild(root);
-    }
-
     private void cd(String name) {
         name = name.trim();
-        if (ROOT_ALIAS.equals(name))
+        if (ROOT_ALIAS.equals(name))  //回到根目錄
             currentDir = root;
-        else if (GO_BACK_ALIAS.equals(name) && currentDir.getParent() != null)
+        else if (GO_BACK_ALIAS.equals(name) && currentDir.getParent() != null) //回到上一層
             currentDir = currentDir.getParent();
-        else
-            currentDir = currentDir.getChild(name);
+        else  //既然已經確定我們要的是Directory型態 那就直接強制轉型就好 如果發生錯誤 那就是使用者輸入的命令不對 予以告知
+            currentDir = (Directory) currentDir.getChild(name);
     }
 
     private void search(String name) {
         printItemNames(currentDir.search(name));
     }
 
-    private void printItemNames(List<EntryItem> items) {
-        for (EntryItem item : items) {
+    private void printItemNames(List<Item> items) {
+        for (Item item : items) {
             System.out.println(item.getName());
         }
     }
@@ -125,11 +119,9 @@ public class CommandLineSystem {
         cat(currentDir.getChild(fileName));
     }
 
-    private void cat(EntryItem item) {
+    private void cat(Item item) {
         if (item instanceof File)
             System.out.println(((File) item).getContent());
-        else if (item instanceof Link)
-            cat(((Link) item).getLinkedItem());
         else
             System.err.println("The item " + item.getName() + " of type " + item.getDisplayType() +
                     " does not support the 'ls' command.");
