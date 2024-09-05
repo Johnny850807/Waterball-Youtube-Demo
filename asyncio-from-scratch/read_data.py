@@ -60,7 +60,7 @@ def read_data_from_url(url: str, port: int) -> str:
             waterball.unregister(f)
             future.set_result(result)
 
-    waterball.register(f, selectors.EVENT_READ, receive_data)  # 註冊 f 的可讀事件
+    waterball.register(f, selectors.EVENT_READ, receive_data, "Read-data-from-url")  # 註冊 f 的可讀事件
     yield from future
     return result
 
@@ -77,17 +77,12 @@ def index():
 def read_data():
     # yield from waterball.sleep(1)
     # waterball.schedule_task(app.serve("localhost", 65432))
-    yield from waterball.sleep(1)
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
-    yield from waterball.sleep(1)
     return page_content
 
 
 def main():
-    g1 = waterball.gather(read_data(), read_data())
-    g2 = waterball.gather(read_data(), read_data())
-    g3 = waterball.gather(read_data(), read_data())
-    results = yield from waterball.gather(g1, g2, g3)
+    results = yield from waterball.gather(read_data(), read_data())
     print(results)
 
 

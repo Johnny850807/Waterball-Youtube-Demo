@@ -29,7 +29,6 @@ class Stats:
         task_names = list(self.data.keys())
         colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple']
         y_pos = range(len(task_names))  # Positions on y-axis for each task
-
         # Plot each task's execution times
         for i, (task, executions) in enumerate(self.data.items()):
             for start, end in executions:

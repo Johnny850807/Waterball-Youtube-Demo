@@ -2,7 +2,7 @@ import logging
 import threading
 import types
 
-from core import EventLoop, Future, Task
+from core import EventLoop, Future, Task, Handle
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
@@ -59,7 +59,7 @@ def gather(*coro_or_futures) -> Future:
         coro = coro if isinstance(coro, types.GeneratorType) else coro.__await__()
         task = Task(coro, loop)
         tasks.append(task)
-        task.add_done_callback(check_if_all_tasks_done)
+        task.add_done_callback(check_if_all_tasks_done, name="Gather Tasks")
         loop.schedule_task(task)
     return f
 
@@ -70,9 +70,9 @@ def schedule_task(coro, name=None):
     loop.schedule_task(task)
 
 
-def register(fileobj, event_mask, callback):
+def register(fileobj, event_mask, callback, name=None):
     loop = get_event_loop()
-    loop.register(fileobj, event_mask, callback)
+    loop.register(fileobj, event_mask, Handle(callback, name))
 
 
 def unregister(fileobj):

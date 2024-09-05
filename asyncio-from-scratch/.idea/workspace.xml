@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed12930e-a6be-4033-bdf7-44160b8fd207" name="Changes" comment=":sparkles: task name &amp; print stats">
+    <list default="true" id="ed12930e-a6be-4033-bdf7-44160b8fd207" name="Changes" comment=":sparkles: gather feature">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/read_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/read_data.py" afterDir="false" />
@@ -28,7 +28,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.read_data.executor": "Run",
+    "Python.read_data.executor": "Debug",
     "Python.stats.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "node.js.detected.package.eslint": "true",
@@ -124,7 +124,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725539084393</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary=":sparkles: gather feature">
+      <option name="closed" value="true" />
+      <created>1725543735483</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725543735483</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -132,7 +140,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value=":sparkles: task name &amp; print stats" />
-    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: task name &amp; print stats" />
+    <MESSAGE value=":sparkles: gather feature" />
+    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: gather feature" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -158,6 +167,6 @@
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$services.coverage" NAME="services Coverage Results" MODIFIED="1725511729602" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$stats.coverage" NAME="stats Coverage Results" MODIFIED="1725534312153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$waterball.coverage" NAME="waterball Coverage Results" MODIFIED="1725443568650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/asyncio_from_scratch$read_data.coverage" NAME="read_data Coverage Results" MODIFIED="1725543676349" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/asyncio_from_scratch$read_data.coverage" NAME="read_data Coverage Results" MODIFIED="1725544567456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -14,8 +14,8 @@ MAXIMUM_SELECT_TIMEOUT = 24 * 3600  # Maximum timeout passed to select to avoid 
 
 
 class Handle:
-    def __init__(self, callback, name: str, *args):
-        self.name = name
+    def __init__(self, callback, name: str = None, *args):
+        self.name = name or callback.__name__
         self.callback = callback
         self.args = args
 
@@ -48,8 +48,11 @@ class EventLoop:
         heapq.heappush(self._scheduled, (new_time, TimeHandle(new_time, callback, name, *args)))
 
     def call_soon(self, callback, *args, name=None):
-        name = name or getattr(callback, 'name', None) or callback.__name__
-        handle = Handle(callback, name, *args) if not isinstance(callback, Handle) else callback
+        if isinstance(callback, Handle):
+            handle = callback
+        else:
+            name = name or getattr(callback, 'name', None) or callback.__name__
+            handle = Handle(callback, name, *args)
         self._ready.append(handle)
 
     def register(self, fileobj, event_mask, callback):
@@ -133,11 +136,11 @@ class Future:
         self._state = _CANCELLED
         self.__schedule_callbacks()
 
-    def add_done_callback(self, callback):
+    def add_done_callback(self, callback, name=None):
         if self.done:
-            self._loop.call_soon(callback, self)
+            self._loop.call_soon(Handle(callback, name, self))
         else:
-            self._callbacks.append(callback)
+            self._callbacks.append(Handle(callback, name, self))
 
     def remove_done_callback(self, callback):
         if callback in self._callbacks:
@@ -197,7 +200,7 @@ class Task(Future):
             if isinstance(result, Future):
                 # 接收到 Future -> 代表 coroutine 正在等待一個未來某時才會完成的值被處理完
                 # 於是這裡偵聽 Future 的完成事件，完成之後 wake up 
-                result.add_done_callback(self.__wake_up)
+                result.add_done_callback(self.__wake_up, name=self.name)
 
     def __wake_up(self, future):
         try:
