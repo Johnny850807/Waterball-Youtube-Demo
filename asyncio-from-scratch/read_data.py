@@ -67,9 +67,9 @@ def read_data_from_url(url: str, port: int) -> str:
 
 def main():
     yield from waterball.sleep(1)
-    app = SimpleAsyncHttpServer()
-    waterball.create_task(app.serve("localhost", 65432))
-    page_content = yield from read_data_from_url("http://localhost", 65432)
+    # app = SimpleAsyncHttpServer()
+    # waterball.schedule_task(app.serve("localhost", 65432))
+    page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     print(page_content)
 
 

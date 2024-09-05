@@ -2,7 +2,7 @@ import logging
 import threading
 import types
 
-from core import EventLoop, Future
+from core import EventLoop, Future, Task
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
@@ -31,8 +31,7 @@ def run(coro):
         raise RuntimeError("waterball.run() cannot be called from a running event loop")
 
     loop = get_event_loop()
-    loop.create_task(coro)
-    loop.run_forever()
+    loop.run_until_complete(coro)
 
 
 def sleep(seconds: int):
@@ -42,9 +41,10 @@ def sleep(seconds: int):
     return future
 
 
-def create_task(coro):
+def schedule_task(coro):
     loop = get_event_loop()
-    loop.create_task(coro)
+    task = Task(coro, loop)
+    loop.schedule_task(task)
 
 
 def register(fileobj, event_mask, callback):

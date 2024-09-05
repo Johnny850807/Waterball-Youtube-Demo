@@ -1,9 +1,11 @@
+import asyncio
 import heapq
 import selectors
 import logging
 from datetime import datetime, timedelta
 
 import waterball
+from stats import Stats
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +21,9 @@ class EventLoop:
         self._scheduled = []
         self._ready = []
         self.running = False
+        self._stats = Stats()
 
-    def create_task(self, coro):
-        task = Task(coro, loop=self)
+    def schedule_task(self, task):
         self.call_soon(task.step)
         return task
 
@@ -39,6 +41,18 @@ class EventLoop:
     def unregister(self, fileobj):
         self._selector.unregister(fileobj)
 
+    def run_until_complete(self, coro):
+        task = Task(coro, loop=self)
+        task.add_done_callback(self._run_until_complete_callback)
+        try:
+            self.schedule_task(task)
+            self.run_forever()
+        finally:
+            task.remove_done_callback(self._run_until_complete_callback)
+
+    def _run_until_complete_callback(self, future):
+        self.stop()
+
     def run_forever(self):
         self.running = True
         while self.running:
@@ -51,7 +65,13 @@ class EventLoop:
             self._process_events(events)
             if len(self._ready) != 0:
                 callback, args = self._ready.pop()
+                self._stats.start_task_step(callback.__name__)
                 callback(*args)
+                self._stats.end_task_step(callback.__name__)
+
+    def stop(self):
+        logger.info('Stop Event Loop')
+        self.running = False
 
     def _process_events(self, events):
         logger.debug(f"Selected Events: len={len(events)}")
@@ -100,6 +120,10 @@ class Future:
             self._loop.call_soon(callback, self)
         else:
             self._callbacks.append(callback)
+
+    def remove_done_callback(self, callback):
+        if callback in self._callbacks:
+            self._callbacks.remove(callback)
 
     def __schedule_callbacks(self):
         callbacks = self._callbacks[:]
