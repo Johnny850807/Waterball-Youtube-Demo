@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed12930e-a6be-4033-bdf7-44160b8fd207" name="Changes" comment="refining plotchart...">
+    <list default="true" id="ed12930e-a6be-4033-bdf7-44160b8fd207" name="Changes" comment="Changed to plot diagram (but it looks like that the concurrency is bad)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/read_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/read_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/stats.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +27,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.read_data.executor": "Run",
+    "Python.read_data.executor": "Debug",
     "Python.stats.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "node.js.detected.package.eslint": "true",
@@ -140,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725544930747</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Changed to plot diagram (but it looks like that the concurrency is bad)">
+      <option name="closed" value="true" />
+      <created>1725546021026</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725546021027</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,7 +157,8 @@
     <MESSAGE value=":sparkles: task name &amp; print stats" />
     <MESSAGE value=":sparkles: gather feature" />
     <MESSAGE value="refining plotchart..." />
-    <option name="LAST_COMMIT_MESSAGE" value="refining plotchart..." />
+    <MESSAGE value="Changed to plot diagram (but it looks like that the concurrency is bad)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed to plot diagram (but it looks like that the concurrency is bad)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -161,9 +169,9 @@
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/read_data.py</url>
-          <line>104</line>
-          <option name="timeStamp" value="39" />
+          <url>file://$PROJECT_DIR$/stats.py</url>
+          <line>20</line>
+          <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -179,8 +187,8 @@
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$main.coverage" NAME="main Coverage Results" MODIFIED="1725502041856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$core.coverage" NAME="core Coverage Results" MODIFIED="1725443561153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$services.coverage" NAME="services Coverage Results" MODIFIED="1725511729602" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/asyncio_from_scratch$stats.coverage" NAME="stats Coverage Results" MODIFIED="1725534312153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/asyncio_from_scratch$stats.coverage" NAME="stats Coverage Results" MODIFIED="1725546259569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/asyncio_from_scratch$waterball.coverage" NAME="waterball Coverage Results" MODIFIED="1725443568650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/asyncio_from_scratch$read_data.coverage" NAME="read_data Coverage Results" MODIFIED="1725545780152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/asyncio_from_scratch$read_data.coverage" NAME="read_data Coverage Results" MODIFIED="1725546382233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -96,7 +96,6 @@ class EventLoop:
         self.running = False
 
     def _process_events(self, events):
-        logger.debug(f"Selected Events: len={len(events)}")
         for key, mask in events:
             fileobj, callback = key.fileobj, key.data
             self.call_soon(callback)

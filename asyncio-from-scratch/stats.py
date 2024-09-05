@@ -29,7 +29,7 @@ class Stats:
             y = [i] * len(times)  # Y-axis values (constant for each task)
 
             # Plot the points
-            ax.scatter(x, y, label=task_name, color=colors[i % len(colors)], s=10)
+            ax.scatter(x, y, label=task_name, color=colors[i % len(colors)], s=1)
 
         # Formatting
         ax.set_xlabel('Execution Time')
