@@ -2,6 +2,7 @@ import asyncio
 import heapq
 import logging
 import selectors
+import collections
 from datetime import datetime, timedelta
 from random import shuffle
 from types import GeneratorType
@@ -11,7 +12,8 @@ import waterball
 
 logger = logging.getLogger(__name__)
 
-MAXIMUM_SELECT_TIMEOUT = 24 * 3600  # Maximum timeout passed to select to avoid OS limitations
+# Maximum timeout passed to select to avoid OS limitations
+MAXIMUM_SELECT_TIMEOUT = 24 * 3600
 
 
 class Handle:
@@ -35,7 +37,7 @@ class EventLoop:
         selector = selector or selectors.DefaultSelector()
         self._selector = selector
         self._scheduled = []
-        self._ready = []
+        self._ready = collections.deque()
         self.running = False
         self.stats = stats.Stats()
 
@@ -87,8 +89,8 @@ class EventLoop:
             events = self._selector.select(0.001)
             self._process_events(events)
             if len(self._ready) != 0:
-                handle = self._ready.pop()
-                self.stats.plot_task_callback(handle.name)
+                handle = self._ready.popleft()
+                self.stats.start_task_step(handle.name)
                 handle()
 
     def stop(self):
@@ -199,7 +201,7 @@ class Task(Future):
         else:
             if isinstance(result, Future):
                 # 接收到 Future -> 代表 coroutine 正在等待一個未來某時才會完成的值被處理完
-                # 於是這裡偵聽 Future 的完成事件，完成之後 wake up 
+                # 於是這裡偵聽 Future 的完成事件，完成之後 wake up
                 result.add_done_callback(self.__wake_up, name=self.name)
 
     def __wake_up(self, future):

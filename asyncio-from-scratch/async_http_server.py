@@ -4,7 +4,6 @@ import selectors
 import socket
 
 import waterball
-from core import Future
 
 logger = logging.getLogger(__name__)
 
@@ -13,20 +12,17 @@ class SimpleAsyncHttpServer:
     def __init__(self):
         self.routes = {}
         self.running = False
-        self._selector = None
         self._server_socket = None
-        self._stopping_server_future = None
 
     def accept_connection(self, server_socket):
         client_socket, addr = server_socket.accept()
-        print(f"Accepted connection from {addr}")
+        logger.info(f"Accepted connection from {addr}")
         client_socket.setblocking(False)
-        self._selector.register(client_socket, selectors.EVENT_READ, data=client_socket)
+        waterball.register(client_socket, selectors.EVENT_READ, lambda: (self.handle_client(client_socket)), f"Handle client {client_socket.fileno()}")
 
     def handle_client(self, client_socket):
-        selector = self._selector
-
         try:
+            # 簡單實作，暫時不考慮 client 傳遞的資料超過 4096 字元的情況
             data = client_socket.recv(4096)
 
             request_lines = data.splitlines()
@@ -45,72 +41,46 @@ class SimpleAsyncHttpServer:
                     # 空行代表 headers 結束，緊接著是 body
                     body_start_index = i + 1
                     body = '\n'.join([l.decode('utf-8') for l in request_lines[body_start_index:]])
-                    print("")
+                    print(body)
                     break
-                print(line)
                 header_key, header_value = line.decode('utf-8').split(": ", 1)
                 headers[header_key] = header_value
             if data:
                 handler = self.routes[path.decode('utf-8')]
 
-                if inspect.isgeneratorfunction(handler):
-                    response_lines = yield from handler()
-                else:
-                    response_lines = handler()
+                # if inspect.isgeneratorfunction(handler):
+                #     response_lines = yield from handler()
+                # else:
+                response_lines = handler()
 
                 response = (
-                        "HTTP/1.1 200 OK\r\n"
-                        "Content-Type: text/plain\r\n"
-                        f"Content-Length: {len(response_lines)}\r\n"
-                        "\r\n" +
-                        response_lines
+                    "HTTP/1.1 200 OK\n"
+                    "Content-Type: text/plain\n"
+                    f"Content-Length: {len(response_lines)}\n"
+                    "\n" +
+                    response_lines
                 )
+
                 client_socket.sendall(response.encode())
             else:
                 logger.debug("Closing connection")
-                selector.unregister(client_socket)
-                client_socket.close()
         except ConnectionResetError:
             logger.debug("Connection reset by peer")
-            selector.unregister(client_socket)
-            client_socket.close()
         except BrokenPipeError:
             logger.debug("Broken pipe error")
-            selector.unregister(client_socket)
+        finally:
+            waterball.unregister(client_socket)
             client_socket.close()
 
     def serve(self, host, port):
         logger.debug("Starting the server...")
-        selector = selectors.DefaultSelector()
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((host, port))
         server_socket.listen()
         server_socket.setblocking(False)
-        selector.register(server_socket, selectors.EVENT_READ, data=None)
+        waterball.register(server_socket, selectors.EVENT_READ, lambda: self.accept_connection(server_socket), f"Accept Connection")
         logger.info("Server started.")
-        self._selector = selector
         self._server_socket = server_socket
-        return self.server_step()
-
-    def server_step(self):
-        try:
-            self.running = True
-            logger.debug("The server is now running...")
-            while self.running:
-                events = self._selector.select()
-                for key, _ in events:
-                    print(f"SelectorKey: {key}")
-                    if key.data is None:
-                        self.accept_connection(key.fileobj)
-                    else:
-                        yield from self.handle_client(key.fileobj)
-                yield from Future(result=True)
-            self._stopping_server_future.set_result(True)
-        except KeyboardInterrupt:
-            print("Server stopped by user")
-        finally:
-            self._selector.close()
-            self._server_socket.close()
 
     def get(self, path):
         def decorator(func):
@@ -120,6 +90,5 @@ class SimpleAsyncHttpServer:
         return decorator
 
     def stop(self):
-        self._stopping_server_future = Future()
+        self._server_socket.close()
         self.running = False
-        yield from self._stopping_server_future

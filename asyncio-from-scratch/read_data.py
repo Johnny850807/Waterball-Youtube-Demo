@@ -75,6 +75,10 @@ def read_data_from_url(url: str, port: int) -> str:
     return result
 
 
+@app.get("/")
+def index():
+    return "Hello"
+
 @app.get("/stop_server")
 def index():
     yield from waterball.sleep(3)
@@ -89,7 +93,9 @@ r = random.Random()
 
 def read_data():
     # yield from waterball.sleep(1)
-    # waterball.schedule_task(app.serve("localhost", 65432))
+    # app.serve("localhost", 65432)
+    # page_content = yield from read_data_from_url("http://localhost", 65432)
+    # print(page_content)
     yield from waterball.sleep(r.randint(0, 5))
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     return page_content
@@ -108,4 +114,5 @@ if __name__ == '__main__':
     )
 
     waterball.run(main())
+    # waterball.run(read_data())
     waterball.draw_stats()
