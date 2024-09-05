@@ -69,24 +69,33 @@ def read_data_from_url(url: str, port: int) -> str:
 def index():
     yield from waterball.sleep(3)
     logger.debug("Stopping server")
-    yield from app.stop() # TODO: didn't work
+    yield from app.stop()  # TODO: didn't work
     logger.debug("Server stopped")
     return "Server stopped"
 
 
-def main():
+def read_data():
     # yield from waterball.sleep(1)
     # waterball.schedule_task(app.serve("localhost", 65432))
     yield from waterball.sleep(1)
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     yield from waterball.sleep(1)
-    print(page_content)
+    return page_content
+
+
+def main():
+    g1 = waterball.gather(read_data(), read_data())
+    g2 = waterball.gather(read_data(), read_data())
+    g3 = waterball.gather(read_data(), read_data())
+    results = yield from waterball.gather(g1, g2, g3)
+    print(results)
 
 
 if __name__ == '__main__':
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     )
-    result = waterball.run(main())
-    result['stats'].draw()
+
+    waterball.run(main())
+    waterball.draw_stats()

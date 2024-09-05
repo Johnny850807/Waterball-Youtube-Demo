@@ -23,22 +23,45 @@ def get_event_loop() -> EventLoop | None:
     return loop
 
 
-def run(coro):
-    if not isinstance(coro, types.GeneratorType):
-        raise TypeError(f"The object {coro} must be a Generator.")
+def run(coro_or_future):
+    if not isinstance(coro_or_future, types.GeneratorType) and not isinstance(coro_or_future, Future):
+        raise TypeError(f"The object {coro_or_future} must be a Generator or a Future.")
 
     if get_running_loop() is not None:
         raise RuntimeError("waterball.run() cannot be called from a running event loop")
 
     loop = get_event_loop()
-    return loop.run_until_complete(coro)
+    loop.run_until_complete(coro_or_future)
 
 
 def sleep(seconds: int):
     loop = get_running_loop()
     future = Future()
-    loop.call_later(seconds, future.set_result,  "Complete Sleeping", name="Sleeping")
+    loop.call_later(seconds, future.set_result, "Complete Sleeping", name="Sleeping")
     return future
+
+
+def gather(*coro_or_futures) -> Future:
+    f = Future()
+    loop = get_event_loop()
+    tasks = []
+    results = [None] * len(coro_or_futures)
+
+    def check_if_all_tasks_done(finished):
+        if finished in tasks:
+            index = tasks.index(finished)
+            results[index] = finished.result
+            n_completed = len([t for t in tasks if t.done])
+            if n_completed == len(tasks):
+                f.set_result(results)
+
+    for coro in coro_or_futures:
+        coro = coro if isinstance(coro, types.GeneratorType) else coro.__await__()
+        task = Task(coro, loop)
+        tasks.append(task)
+        task.add_done_callback(check_if_all_tasks_done)
+        loop.schedule_task(task)
+    return f
 
 
 def schedule_task(coro, name=None):
@@ -55,3 +78,8 @@ def register(fileobj, event_mask, callback):
 def unregister(fileobj):
     loop = get_event_loop()
     loop.unregister(fileobj)
+
+
+def draw_stats():
+    loop = get_event_loop()
+    loop.stats.draw()

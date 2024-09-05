@@ -1,7 +1,9 @@
+import asyncio
 import heapq
 import logging
 import selectors
 from datetime import datetime, timedelta
+from types import GeneratorType
 
 import stats
 import waterball
@@ -34,7 +36,7 @@ class EventLoop:
         self._scheduled = []
         self._ready = []
         self.running = False
-        self._stats = stats.Stats()
+        self.stats = stats.Stats()
 
     def schedule_task(self, task):
         self.call_soon(task.step, name=task.name)
@@ -56,17 +58,15 @@ class EventLoop:
     def unregister(self, fileobj):
         self._selector.unregister(fileobj)
 
-    def run_until_complete(self, coro):
+    def run_until_complete(self, coro_or_future=None):
+        coro = coro_or_future if isinstance(coro_or_future, GeneratorType) else coro_or_future.__await__()
         task = Task(coro, loop=self)
         task.add_done_callback(self._run_until_complete_callback)
+        self.schedule_task(task)
         try:
-            self.schedule_task(task)
             self.run_forever()
         finally:
             task.remove_done_callback(self._run_until_complete_callback)
-        return {
-            'stats': self._stats,
-        }
 
     def _run_until_complete_callback(self, future):
         self.stop()
@@ -79,13 +79,13 @@ class EventLoop:
                 if scheduled_time <= datetime.now():
                     _, handle = heapq.heappop(self._scheduled)
                     self.call_soon(handle)
-            events = self._selector.select(1)
+            events = self._selector.select(0.01)
             self._process_events(events)
             if len(self._ready) != 0:
                 handle = self._ready.pop()
-                self._stats.start_task_step(handle.name)
+                self.stats.start_task_step(handle.name)
                 handle()
-                self._stats.end_task_step(handle.name)
+                self.stats.end_task_step(handle.name)
 
     def stop(self):
         logger.info('Stop Event Loop')
@@ -180,7 +180,7 @@ class Task(Future):
     def __init__(self, coro, loop: EventLoop, name=None):
         super().__init__()
         count = _increment_task_count()
-        self.__log = logger.getChild(self.__class__.__name__)
+        self.__log = logger.getChild(f"{self.__class__.__name__}({name})")
         self.name = name or f"Task {count}"
         self.coro = coro
         self.loop = loop
@@ -191,6 +191,7 @@ class Task(Future):
             # 回溯：繼續執行 coroutine 的下一個 frame
             result = self.coro.send(None)
         except StopIteration as e:
+            self.__log.debug("StopIteration")
             self.set_result(e.value)
         else:
             if isinstance(result, Future):
