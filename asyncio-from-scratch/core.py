@@ -1,9 +1,9 @@
-import asyncio
 import heapq
-import selectors
 import logging
+import selectors
 from datetime import datetime, timedelta
 
+import stats
 import waterball
 
 logger = logging.getLogger(__name__)
@@ -11,27 +11,44 @@ logger = logging.getLogger(__name__)
 MAXIMUM_SELECT_TIMEOUT = 24 * 3600  # Maximum timeout passed to select to avoid OS limitations
 
 
+class Handle:
+    def __init__(self, callback, name: str, *args):
+        self.name = name
+        self.callback = callback
+        self.args = args
+
+    def __call__(self):
+        return self.callback(*self.args)
+
+
+class TimeHandle(Handle):
+    def __init__(self, when: datetime, callback, name: str, *args):
+        super().__init__(callback, name, *args)
+        self.when = when
+
+
 class EventLoop:
     def __init__(self, selector=None) -> None:
-        if selector is None:
-            selector = selectors.DefaultSelector()
-
+        selector = selector or selectors.DefaultSelector()
         self._selector = selector
         self._scheduled = []
         self._ready = []
         self.running = False
+        self._stats = stats.Stats()
 
     def schedule_task(self, task):
-        self.call_soon(task.step)
+        self.call_soon(task.step, name=task.name)
         return task
 
-    def call_later(self, delay: int, callback, *args):
+    def call_later(self, delay: int, callback, *args, name: str = None):
         current_time = datetime.now()
         new_time = current_time + timedelta(seconds=delay)
-        heapq.heappush(self._scheduled, (new_time, callback, args))
+        heapq.heappush(self._scheduled, (new_time, TimeHandle(new_time, callback, name, *args)))
 
-    def call_soon(self, callback, *args):
-        self._ready.append((callback, args))
+    def call_soon(self, callback, *args, name=None):
+        name = name or getattr(callback, 'name', None) or callback.__name__
+        handle = Handle(callback, name, *args) if not isinstance(callback, Handle) else callback
+        self._ready.append(handle)
 
     def register(self, fileobj, event_mask, callback):
         self._selector.register(fileobj, event_mask, data=callback)
@@ -47,6 +64,9 @@ class EventLoop:
             self.run_forever()
         finally:
             task.remove_done_callback(self._run_until_complete_callback)
+        return {
+            'stats': self._stats,
+        }
 
     def _run_until_complete_callback(self, future):
         self.stop()
@@ -55,15 +75,17 @@ class EventLoop:
         self.running = True
         while self.running:
             if len(self._scheduled) != 0:
-                (scheduled_time, callback, *args) = self._scheduled[0]
+                scheduled_time, handle = self._scheduled[0]
                 if scheduled_time <= datetime.now():
-                    (scheduled_time, callback, *args) = heapq.heappop(self._scheduled)
-                    self.call_soon(callback, *args)
+                    _, handle = heapq.heappop(self._scheduled)
+                    self.call_soon(handle)
             events = self._selector.select(1)
             self._process_events(events)
             if len(self._ready) != 0:
-                callback, args = self._ready.pop()
-                callback(*args)
+                handle = self._ready.pop()
+                self._stats.start_task_step(handle.name)
+                handle()
+                self._stats.end_task_step(handle.name)
 
     def stop(self):
         logger.info('Stop Event Loop')
@@ -145,10 +167,21 @@ class Future:
     __iter__ = __await__
 
 
+_num_of_tasks = 0
+
+
+def _increment_task_count() -> int:
+    global _num_of_tasks
+    _num_of_tasks = _num_of_tasks + 1
+    return _num_of_tasks
+
+
 class Task(Future):
-    def __init__(self, coro, loop: EventLoop):
+    def __init__(self, coro, loop: EventLoop, name=None):
         super().__init__()
+        count = _increment_task_count()
         self.__log = logger.getChild(self.__class__.__name__)
+        self.name = name or f"Task {count}"
         self.coro = coro
         self.loop = loop
 

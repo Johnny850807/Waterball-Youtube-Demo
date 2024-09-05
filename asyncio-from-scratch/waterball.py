@@ -31,19 +31,19 @@ def run(coro):
         raise RuntimeError("waterball.run() cannot be called from a running event loop")
 
     loop = get_event_loop()
-    loop.run_until_complete(coro)
+    return loop.run_until_complete(coro)
 
 
 def sleep(seconds: int):
     loop = get_running_loop()
     future = Future()
-    loop.call_later(seconds, future.set_result, "Complete Sleeping")
+    loop.call_later(seconds, future.set_result,  "Complete Sleeping", name="Sleeping")
     return future
 
 
-def schedule_task(coro):
+def schedule_task(coro, name=None):
     loop = get_event_loop()
-    task = Task(coro, loop)
+    task = Task(coro, loop, name=name)
     loop.schedule_task(task)
 
 

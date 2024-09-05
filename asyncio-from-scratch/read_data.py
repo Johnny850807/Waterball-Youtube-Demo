@@ -77,7 +77,9 @@ def index():
 def main():
     # yield from waterball.sleep(1)
     # waterball.schedule_task(app.serve("localhost", 65432))
+    yield from waterball.sleep(1)
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
+    yield from waterball.sleep(1)
     print(page_content)
 
 
@@ -86,4 +88,5 @@ if __name__ == '__main__':
         level=logging.DEBUG,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     )
-    waterball.run(main())
+    result = waterball.run(main())
+    result['stats'].draw()
