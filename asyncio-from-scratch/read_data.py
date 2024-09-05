@@ -1,4 +1,5 @@
 import logging
+import random
 import select
 import selectors
 import socket
@@ -8,6 +9,14 @@ from async_http_server import SimpleAsyncHttpServer
 
 logger = logging.getLogger(__name__)
 app = SimpleAsyncHttpServer()
+
+_num_read_data_task = 0
+
+
+def _increment_num_read_data_task():
+    global _num_read_data_task
+    _num_read_data_task += 1
+    return _num_read_data_task
 
 
 def read_data_from_url(url: str, port: int) -> str:
@@ -48,7 +57,7 @@ def read_data_from_url(url: str, port: int) -> str:
 
     def receive_data():
         nonlocal result, f
-        frame = f.recv(1024)
+        frame = f.recv(2)
         content = frame.decode('utf-8')
         logger.debug(f"Next frame: '{content}'")
         result += content
@@ -60,7 +69,8 @@ def read_data_from_url(url: str, port: int) -> str:
             waterball.unregister(f)
             future.set_result(result)
 
-    waterball.register(f, selectors.EVENT_READ, receive_data, "Read-data-from-url")  # 註冊 f 的可讀事件
+    name = f"Read data #{_increment_num_read_data_task()}"
+    waterball.register(f, selectors.EVENT_READ, receive_data, name)  # 註冊 f 的可讀事件
     yield from future
     return result
 
@@ -74,15 +84,20 @@ def index():
     return "Server stopped"
 
 
+r = random.Random()
+
+
 def read_data():
     # yield from waterball.sleep(1)
     # waterball.schedule_task(app.serve("localhost", 65432))
+    yield from waterball.sleep(r.randint(0, 5))
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     return page_content
 
 
 def main():
-    results = yield from waterball.gather(read_data(), read_data())
+    coros = [read_data] * 10
+    results = yield from waterball.gather(*[coro() for coro in coros])
     print(results)
 
 

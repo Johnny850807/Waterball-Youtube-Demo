@@ -3,6 +3,7 @@ import heapq
 import logging
 import selectors
 from datetime import datetime, timedelta
+from random import shuffle
 from types import GeneratorType
 
 import stats
@@ -53,6 +54,7 @@ class EventLoop:
         else:
             name = name or getattr(callback, 'name', None) or callback.__name__
             handle = Handle(callback, name, *args)
+        logger.info(f"Scheduled: {handle.name}")
         self._ready.append(handle)
 
     def register(self, fileobj, event_mask, callback):
@@ -82,13 +84,12 @@ class EventLoop:
                 if scheduled_time <= datetime.now():
                     _, handle = heapq.heappop(self._scheduled)
                     self.call_soon(handle)
-            events = self._selector.select(0.01)
+            events = self._selector.select(0.001)
             self._process_events(events)
             if len(self._ready) != 0:
                 handle = self._ready.pop()
-                self.stats.start_task_step(handle.name)
+                self.stats.plot_task_callback(handle.name)
                 handle()
-                self.stats.end_task_step(handle.name)
 
     def stop(self):
         logger.info('Stop Event Loop')
