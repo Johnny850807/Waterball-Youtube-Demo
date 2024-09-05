@@ -40,3 +40,18 @@ def sleep(seconds: int):
     future = Future()
     loop.call_later(seconds, future.set_result, "Complete Sleeping")
     return future
+
+
+def create_task(coro):
+    loop = get_event_loop()
+    loop.create_task(coro)
+
+
+def register(fileobj, event_mask, callback):
+    loop = get_event_loop()
+    loop.register(fileobj, event_mask, callback)
+
+
+def unregister(fileobj):
+    loop = get_event_loop()
+    loop.unregister(fileobj)

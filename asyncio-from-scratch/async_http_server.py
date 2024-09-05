@@ -26,10 +26,11 @@ class SimpleAsyncHttpServer:
         selector = self._selector
 
         try:
-            data = client_socket.recv(1024)
-            
+            data = client_socket.recv(4096)
+
             request_lines = data.splitlines()
-            request_line = request_lines[0]
+            request_line = request_lines[0].decode('utf-8')
+            print(request_line)
             headers = {}
             body = None
 
@@ -37,34 +38,31 @@ class SimpleAsyncHttpServer:
             method, path, version = request_line.split()
 
             # 解析 headers
-            for line in request_lines[1:]:
+            for i in range(len(request_lines[1:])):
+                line = request_lines[i+1].decode('utf-8').strip()
                 if line == '':
-                    # 空行代表 headers 結束，下面是 body
-                    body_start_index = request_lines.index(line) + 1
-                    body = '\r\n'.join(request_lines[body_start_index:])
+                    # 空行代表 headers 結束，緊接著是 body
+                    body_start_index = i + 1
+                    body = '\n'.join(request_lines[body_start_index:])
+                    print("")
                     break
+                print(line)
                 header_key, header_value = line.split(": ", 1)
                 headers[header_key] = header_value
-
             if data:
-                request_line = data.decode().split('\r\n')[0]
-                print(f"Received request: {request_line}")
-
                 handler = self.routes[path]
 
                 if inspect.isgeneratorfunction(handler):
-                    response = yield from handler(headers, body)
+                    response_lines = yield from handler(headers, body)
                 else:
-                    response = handler(headers, body)
-
-                response_lines = self.routes[path]()
+                    response_lines = handler(headers, body)
 
                 response = (
-                    "HTTP/1.1 200 OK\r\n"
-                    "Content-Type: text/plain\r\n"
-                    f"Content-Length: {len(response_lines)}\r\n"
-                    "\r\n" +
-                    response_lines
+                        "HTTP/1.1 200 OK\r\n"
+                        "Content-Type: text/plain\r\n"
+                        f"Content-Length: {len(response_lines)}\r\n"
+                        "\r\n" +
+                        response_lines
                 )
                 client_socket.sendall(response.encode())
             else:
@@ -81,13 +79,14 @@ class SimpleAsyncHttpServer:
             client_socket.close()
 
     def serve(self, host, port):
+        logger.debug("Starting the server...")
         selector = selectors.DefaultSelector()
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((host, port))
         server_socket.listen()
         server_socket.setblocking(False)
         selector.register(server_socket, selectors.EVENT_READ, data=None)
-
+        logger.info("Server started.")
         self._selector = selector
         self._server_socket = server_socket
         return self.server_step()
@@ -95,6 +94,7 @@ class SimpleAsyncHttpServer:
     def server_step(self):
         try:
             self.running = True
+            logger.debug("The server is now running...")
             while self.running:
                 events = self._selector.select()
                 for key, _ in events:
@@ -103,7 +103,7 @@ class SimpleAsyncHttpServer:
                         self.accept_connection(key.fileobj)
                     else:
                         yield from self.handle_client(key.fileobj)
-                yield from Future.done()
+                yield from Future(result=True)
         except KeyboardInterrupt:
             print("Server stopped by user")
         finally:

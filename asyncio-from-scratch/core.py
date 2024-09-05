@@ -1,12 +1,21 @@
 import heapq
+import selectors
 import logging
 from datetime import datetime, timedelta
 
+import waterball
+
 logger = logging.getLogger(__name__)
+
+MAXIMUM_SELECT_TIMEOUT = 24 * 3600  # Maximum timeout passed to select to avoid OS limitations
 
 
 class EventLoop:
-    def __init__(self) -> None:
+    def __init__(self, selector=None) -> None:
+        if selector is None:
+            selector = selectors.DefaultSelector()
+
+        self._selector = selector
         self._scheduled = []
         self._ready = []
         self.running = False
@@ -24,6 +33,12 @@ class EventLoop:
     def call_soon(self, callback, *args):
         self._ready.append((callback, args))
 
+    def register(self, fileobj, event_mask, callback):
+        self._selector.register(fileobj, event_mask, data=callback)
+
+    def unregister(self, fileobj):
+        self._selector.unregister(fileobj)
+
     def run_forever(self):
         self.running = True
         while self.running:
@@ -32,33 +47,82 @@ class EventLoop:
                 if scheduled_time <= datetime.now():
                     (scheduled_time, callback, *args) = heapq.heappop(self._scheduled)
                     self.call_soon(callback, *args)
-
+            events = self._selector.select(1)
+            self._process_events(events)
             if len(self._ready) != 0:
                 callback, args = self._ready.pop()
                 callback(*args)
 
+    def _process_events(self, events):
+        logger.debug(f"Selected Events: len={len(events)}")
+        for key, mask in events:
+            fileobj, callback = key.fileobj, key.data
+            self.call_soon(callback)
+
+
+_PENDING = "PENDING"
+_CANCELLED = "CANCELLED"
+_FINISHED = "FINISHED"
+
 
 class Future:
-    def __init__(self):
-        self.done = False
-        self.result = None
+    def __init__(self, result=None, loop: EventLoop = None):
+        self._state = _PENDING if result is None else _FINISHED
+        self._result = result
+        self._exception = None
+        self._callbacks = []
+        self._loop = loop if loop is not None else waterball.get_event_loop()
+
+    @property
+    def done(self):
+        return self._state is not _PENDING
+
+    @property
+    def result(self):
+        return self._result
+
+    @property
+    def exception(self):
+        return self._exception
 
     def set_result(self, result):
-        self.result = result
-        self.done = True
+        self._result = result
+        self._state = _FINISHED
+        self.__schedule_callbacks()
+
+    def set_exception(self, exception):
+        self._exception = exception
+        self._state = _CANCELLED
+        self.__schedule_callbacks()
+
+    def add_done_callback(self, callback):
+        if self.done:
+            self._loop.call_soon(callback, self)
+        else:
+            self._callbacks.append(callback)
+
+    def __schedule_callbacks(self):
+        callbacks = self._callbacks[:]
+
+        if not callbacks:
+            return
+
+        self._callbacks[:] = []
+        for callback in callbacks:
+            self._loop.call_soon(callback, self)
 
     def __await__(self):
-        while not self.done:
+        if not self.done:
+            # 第一次 await Future 時 -- 如果還沒完成，先將 future 自己 yield 出去，
+            # Task 那邊收到 yield 的 result 若是 Future 會去偵聽 future 的完成事件 (via add_done_callback)，
+            # 確認 future 完成後才會再呼叫一次這個 coro 繼續往下執行
             yield self
+        # 呈上，預期收到 future 完成事件後才會執行到這邊，所以如果此時還判斷出 not done() 就代表有鬼
+        if not self.done:
+            raise RuntimeError("await wasn't used with future")
         return self.result
 
     __iter__ = __await__
-
-    @classmethod
-    def done(cls, result=True):
-        f = Future()
-        f.set_result(result)
-        return f
 
 
 class Task(Future):
@@ -67,15 +131,27 @@ class Task(Future):
         self.__log = logger.getChild(self.__class__.__name__)
         self.coro = coro
         self.loop = loop
-        self.done = False
 
-    def step(self):
+    def step(self, err=None):
         try:
             self.__log.debug("Next step")
+            # 回溯：繼續執行 coroutine 的下一個 frame
             result = self.coro.send(None)
         except StopIteration as e:
             self.set_result(e.value)
         else:
-            # Future ->
             if isinstance(result, Future):
-                self.loop.call_soon(self.step)
+                # 接收到 Future -> 代表 coroutine 正在等待一個未來某時才會完成的值被處理完
+                # 於是這裡偵聽 Future 的完成事件，完成之後 wake up 
+                result.add_done_callback(self.__wake_up)
+
+    def __wake_up(self, future):
+        try:
+            # 確認 future 完成之後，Task 要醒來繼續執行下一個 frame
+            # 於是先判斷一下 future 完成是：異常狀態還是正常完成
+            future.result
+        except BaseException as err:
+            # 若是異常狀態，則將例外送入 coroutine (呼叫 coro.throw(err))
+            self.step(err)
+        else:
+            self.step()
