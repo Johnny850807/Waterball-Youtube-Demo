@@ -9,8 +9,6 @@ app = SimpleAsyncHttpServer()
 
 
 def process_message(message: str):
-    l = asyncio.get_event_loop()
-    BaseSelectorEventLoop
     yield from waterball.sleep(3)
     yield from waterball.sleep(3)
     yield from waterball.sleep(3)

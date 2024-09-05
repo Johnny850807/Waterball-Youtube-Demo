@@ -1,0 +1,231 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import asyncio\nimport logging\nfrom asyncio.selector_events import BaseSelectorEventLoop\n\nimport waterball\nfrom async_http_server import SimpleAsyncHttpServer\n\napp = SimpleAsyncHttpServer()\n\n\ndef process_message(message: str):\n    l = asyncio.get_event_loop()\n    BaseSelectorEventLoop\n    yield from waterball.sleep(3)\n    yield from waterball.sleep(3)\n    yield from waterball.sleep(3)\n    return f\"Echo: {message}\"\n\n\ndef main():\n    yield from process_message(\"1\")\n    yield from process_message(\"2\")\n    yield from process_message(\"3\")\n\n\n@app.get(\"/api/health\")\ndef health_check(message: str):\n    yield from process_message(message)\n\n\nif __name__ == '__main__':\n    logging.basicConfig(\n        level=logging.DEBUG,\n        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',\n    )\n    waterball.run(main())\n    waterball.run(app.serve(\"localhost\", 65432))\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 57a1236f79c696400310f7f633942f779797c468)
++++ b/main.py	(date 1725536505587)
+@@ -9,10 +9,6 @@
+ 
+ 
+ def process_message(message: str):
+-    l = asyncio.get_event_loop()
+-    BaseSelectorEventLoop
+-    yield from waterball.sleep(3)
+-    yield from waterball.sleep(3)
+     yield from waterball.sleep(3)
+     return f"Echo: {message}"
+ 
+Index: async_http_server.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import inspect\nimport logging\nimport selectors\nimport socket\n\nimport waterball\nfrom core import Future\n\nlogger = logging.getLogger(__name__)\n\n\nclass SimpleAsyncHttpServer:\n    def __init__(self):\n        self.routes = {}\n        self.running = False\n        self._selector = None\n        self._server_socket = None\n\n    def accept_connection(self, server_socket):\n        client_socket, addr = server_socket.accept()\n        print(f\"Accepted connection from {addr}\")\n        client_socket.setblocking(False)\n        self._selector.register(client_socket, selectors.EVENT_READ, data=client_socket)\n\n    def handle_client(self, client_socket):\n        selector = self._selector\n\n        try:\n            data = client_socket.recv(4096)\n\n            request_lines = data.splitlines()\n            request_line = request_lines[0].decode('utf-8')\n            print(request_line)\n            headers = {}\n            body = None\n\n            # 解析 request_line: \"POST /submit HTTP/1.1\"\n            method, path, version = request_line.split()\n\n            # 解析 headers\n            for i in range(len(request_lines[1:])):\n                line = request_lines[i+1].decode('utf-8').strip()\n                if line == '':\n                    # 空行代表 headers 結束，緊接著是 body\n                    body_start_index = i + 1\n                    body = '\\n'.join(request_lines[body_start_index:])\n                    print(\"\")\n                    break\n                print(line)\n                header_key, header_value = line.split(\": \", 1)\n                headers[header_key] = header_value\n            if data:\n                handler = self.routes[path]\n\n                if inspect.isgeneratorfunction(handler):\n                    response_lines = yield from handler(headers, body)\n                else:\n                    response_lines = handler(headers, body)\n\n                response = (\n                        \"HTTP/1.1 200 OK\\r\\n\"\n                        \"Content-Type: text/plain\\r\\n\"\n                        f\"Content-Length: {len(response_lines)}\\r\\n\"\n                        \"\\r\\n\" +\n                        response_lines\n                )\n                client_socket.sendall(response.encode())\n            else:\n                logger.debug(\"Closing connection\")\n                selector.unregister(client_socket)\n                client_socket.close()\n        except ConnectionResetError:\n            logger.debug(\"Connection reset by peer\")\n            selector.unregister(client_socket)\n            client_socket.close()\n        except BrokenPipeError:\n            logger.debug(\"Broken pipe error\")\n            selector.unregister(client_socket)\n            client_socket.close()\n\n    def serve(self, host, port):\n        logger.debug(\"Starting the server...\")\n        selector = selectors.DefaultSelector()\n        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n        server_socket.bind((host, port))\n        server_socket.listen()\n        server_socket.setblocking(False)\n        selector.register(server_socket, selectors.EVENT_READ, data=None)\n        logger.info(\"Server started.\")\n        self._selector = selector\n        self._server_socket = server_socket\n        return self.server_step()\n\n    def server_step(self):\n        try:\n            self.running = True\n            logger.debug(\"The server is now running...\")\n            while self.running:\n                events = self._selector.select()\n                for key, _ in events:\n                    print(f\"SelectorKey: {key}\")\n                    if key.data is None:\n                        self.accept_connection(key.fileobj)\n                    else:\n                        yield from self.handle_client(key.fileobj)\n                yield from Future(result=True)\n        except KeyboardInterrupt:\n            print(\"Server stopped by user\")\n        finally:\n            self._selector.close()\n            self._server_socket.close()\n\n    def get(self, path):\n        def decorator(func):\n            self.routes[path] = func\n            return func\n\n        return decorator\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/async_http_server.py b/async_http_server.py
+--- a/async_http_server.py	(revision 57a1236f79c696400310f7f633942f779797c468)
++++ b/async_http_server.py	(date 1725536327608)
+@@ -29,7 +29,7 @@
+             data = client_socket.recv(4096)
+ 
+             request_lines = data.splitlines()
+-            request_line = request_lines[0].decode('utf-8')
++            request_line = request_lines[0]
+             print(request_line)
+             headers = {}
+             body = None
+@@ -39,23 +39,23 @@
+ 
+             # 解析 headers
+             for i in range(len(request_lines[1:])):
+-                line = request_lines[i+1].decode('utf-8').strip()
+-                if line == '':
++                line = request_lines[i+1]
++                if len(line) == 0:
+                     # 空行代表 headers 結束，緊接著是 body
+                     body_start_index = i + 1
+-                    body = '\n'.join(request_lines[body_start_index:])
++                    body = '\n'.join([l.decode('utf-8') for l in request_lines[body_start_index:]])
+                     print("")
+                     break
+                 print(line)
+-                header_key, header_value = line.split(": ", 1)
++                header_key, header_value = line.decode('utf-8').split(": ", 1)
+                 headers[header_key] = header_value
+             if data:
+-                handler = self.routes[path]
++                handler = self.routes[path.decode('utf-8')]
+ 
+                 if inspect.isgeneratorfunction(handler):
+-                    response_lines = yield from handler(headers, body)
++                    response_lines = yield from handler()
+                 else:
+-                    response_lines = handler(headers, body)
++                    response_lines = handler()
+ 
+                 response = (
+                         "HTTP/1.1 200 OK\r\n"
+Index: core.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import asyncio\nimport heapq\nimport selectors\nimport logging\nfrom datetime import datetime, timedelta\n\nimport waterball\nfrom stats import Stats\n\nlogger = logging.getLogger(__name__)\n\nMAXIMUM_SELECT_TIMEOUT = 24 * 3600  # Maximum timeout passed to select to avoid OS limitations\n\n\nclass EventLoop:\n    def __init__(self, selector=None) -> None:\n        if selector is None:\n            selector = selectors.DefaultSelector()\n\n        self._selector = selector\n        self._scheduled = []\n        self._ready = []\n        self.running = False\n        self._stats = Stats()\n\n    def schedule_task(self, task):\n        self.call_soon(task.step)\n        return task\n\n    def call_later(self, delay: int, callback, *args):\n        current_time = datetime.now()\n        new_time = current_time + timedelta(seconds=delay)\n        heapq.heappush(self._scheduled, (new_time, callback, args))\n\n    def call_soon(self, callback, *args):\n        self._ready.append((callback, args))\n\n    def register(self, fileobj, event_mask, callback):\n        self._selector.register(fileobj, event_mask, data=callback)\n\n    def unregister(self, fileobj):\n        self._selector.unregister(fileobj)\n\n    def run_until_complete(self, coro):\n        task = Task(coro, loop=self)\n        task.add_done_callback(self._run_until_complete_callback)\n        try:\n            self.schedule_task(task)\n            self.run_forever()\n        finally:\n            task.remove_done_callback(self._run_until_complete_callback)\n\n    def _run_until_complete_callback(self, future):\n        self.stop()\n\n    def run_forever(self):\n        self.running = True\n        while self.running:\n            if len(self._scheduled) != 0:\n                (scheduled_time, callback, *args) = self._scheduled[0]\n                if scheduled_time <= datetime.now():\n                    (scheduled_time, callback, *args) = heapq.heappop(self._scheduled)\n                    self.call_soon(callback, *args)\n            events = self._selector.select(1)\n            self._process_events(events)\n            if len(self._ready) != 0:\n                callback, args = self._ready.pop()\n                self._stats.start_task_step(callback.__name__)\n                callback(*args)\n                self._stats.end_task_step(callback.__name__)\n\n    def stop(self):\n        logger.info('Stop Event Loop')\n        self.running = False\n\n    def _process_events(self, events):\n        logger.debug(f\"Selected Events: len={len(events)}\")\n        for key, mask in events:\n            fileobj, callback = key.fileobj, key.data\n            self.call_soon(callback)\n\n\n_PENDING = \"PENDING\"\n_CANCELLED = \"CANCELLED\"\n_FINISHED = \"FINISHED\"\n\n\nclass Future:\n    def __init__(self, result=None, loop: EventLoop = None):\n        self._state = _PENDING if result is None else _FINISHED\n        self._result = result\n        self._exception = None\n        self._callbacks = []\n        self._loop = loop if loop is not None else waterball.get_event_loop()\n\n    @property\n    def done(self):\n        return self._state is not _PENDING\n\n    @property\n    def result(self):\n        return self._result\n\n    @property\n    def exception(self):\n        return self._exception\n\n    def set_result(self, result):\n        self._result = result\n        self._state = _FINISHED\n        self.__schedule_callbacks()\n\n    def set_exception(self, exception):\n        self._exception = exception\n        self._state = _CANCELLED\n        self.__schedule_callbacks()\n\n    def add_done_callback(self, callback):\n        if self.done:\n            self._loop.call_soon(callback, self)\n        else:\n            self._callbacks.append(callback)\n\n    def remove_done_callback(self, callback):\n        if callback in self._callbacks:\n            self._callbacks.remove(callback)\n\n    def __schedule_callbacks(self):\n        callbacks = self._callbacks[:]\n\n        if not callbacks:\n            return\n\n        self._callbacks[:] = []\n        for callback in callbacks:\n            self._loop.call_soon(callback, self)\n\n    def __await__(self):\n        if not self.done:\n            # 第一次 await Future 時 -- 如果還沒完成，先將 future 自己 yield 出去，\n            # Task 那邊收到 yield 的 result 若是 Future 會去偵聽 future 的完成事件 (via add_done_callback)，\n            # 確認 future 完成後才會再呼叫一次這個 coro 繼續往下執行\n            yield self\n        # 呈上，預期收到 future 完成事件後才會執行到這邊，所以如果此時還判斷出 not done() 就代表有鬼\n        if not self.done:\n            raise RuntimeError(\"await wasn't used with future\")\n        return self.result\n\n    __iter__ = __await__\n\n\nclass Task(Future):\n    def __init__(self, coro, loop: EventLoop):\n        super().__init__()\n        self.__log = logger.getChild(self.__class__.__name__)\n        self.coro = coro\n        self.loop = loop\n\n    def step(self, err=None):\n        try:\n            self.__log.debug(\"Next step\")\n            # 回溯：繼續執行 coroutine 的下一個 frame\n            result = self.coro.send(None)\n        except StopIteration as e:\n            self.set_result(e.value)\n        else:\n            if isinstance(result, Future):\n                # 接收到 Future -> 代表 coroutine 正在等待一個未來某時才會完成的值被處理完\n                # 於是這裡偵聽 Future 的完成事件，完成之後 wake up \n                result.add_done_callback(self.__wake_up)\n\n    def __wake_up(self, future):\n        try:\n            # 確認 future 完成之後，Task 要醒來繼續執行下一個 frame\n            # 於是先判斷一下 future 完成是：異常狀態還是正常完成\n            future.result\n        except BaseException as err:\n            # 若是異常狀態，則將例外送入 coroutine (呼叫 coro.throw(err))\n            self.step(err)\n        else:\n            self.step()\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core.py b/core.py
+--- a/core.py	(revision 57a1236f79c696400310f7f633942f779797c468)
++++ b/core.py	(date 1725536429462)
+@@ -1,11 +1,9 @@
+-import asyncio
+ import heapq
+-import selectors
+ import logging
++import selectors
+ from datetime import datetime, timedelta
+ 
+ import waterball
+-from stats import Stats
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -21,7 +19,6 @@
+         self._scheduled = []
+         self._ready = []
+         self.running = False
+-        self._stats = Stats()
+ 
+     def schedule_task(self, task):
+         self.call_soon(task.step)
+@@ -65,9 +62,7 @@
+             self._process_events(events)
+             if len(self._ready) != 0:
+                 callback, args = self._ready.pop()
+-                self._stats.start_task_step(callback.__name__)
+                 callback(*args)
+-                self._stats.end_task_step(callback.__name__)
+ 
+     def stop(self):
+         logger.info('Stop Event Loop')
+Index: read_data.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import logging\nimport selectors\nimport socket\nimport time\nimport select\n\nimport waterball\nfrom async_http_server import SimpleAsyncHttpServer\n\nlogger = logging.getLogger(__name__)\n\n\ndef read_data_from_url(url: str, port: int) -> str:\n    # Extract the host and path from the URL\n    host = url.split('//')[-1].split('/')[0]\n    path = url.split(host)[-1]\n    path = '/' if path == '' else path\n\n    # Create a socket connection to the host\n    f = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    f.setblocking(False)  # Non-blocking mode\n\n    f.connect_ex((host, port))  # Non-blocking connect (use connect_ex to avoid blocking)\n\n    # 使用 select 監控可寫的狀態\n    _, writable, _ = select.select([], [f], [], 5)  # 5 秒超時\n    if writable:\n        # 檢查 socket 狀態是否有錯誤\n        err = f.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)\n        if err == 0:\n            print(\"連線成功\")\n        else:\n            print(f\"連線失敗，錯誤碼: {err}\")\n    else:\n        print(\"連線超時\")\n\n    # Create the HTTP GET request\n    request = f\"GET {path} HTTP/1.1\\nHost: {host}\\nConnection: close\\n\\n\"\n    request_encoded = request.encode('utf-8')\n    logger.debug(f\"Opening the connection by '{request_encoded}'...\")\n    f.sendall(request_encoded)  # Send the request to the server\n    logger.debug(f\"Connection opened.\")\n\n    # 開始讀取回應    \n    future = waterball.Future()\n\n    result = \"\"\n\n    def receive_data():\n        nonlocal result, f\n        frame = f.recv(1024)\n        content = frame.decode('utf-8')\n        logger.debug(f\"Next frame: '{content}'\")\n        result += content\n\n        has_next_data = f.recv(1, socket.MSG_PEEK)  # peek next data\n        # When recv() returns b'', it indicates the socket has been closed by the remote peer.\n        if not has_next_data:\n            logger.debug(\"Connection closed\")\n            waterball.unregister(f)\n            future.set_result(result)\n\n    waterball.register(f, selectors.EVENT_READ, receive_data)  # 註冊 f 的可讀事件\n    yield from future\n    return result\n\n\ndef main():\n    yield from waterball.sleep(1)\n    # app = SimpleAsyncHttpServer()\n    # waterball.schedule_task(app.serve(\"localhost\", 65432))\n    page_content = yield from read_data_from_url(\"http://waterballsa.tw\", 80)\n    print(page_content)\n\n\nif __name__ == '__main__':\n    logging.basicConfig(\n        level=logging.DEBUG,\n        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',\n    )\n    waterball.run(main())\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/read_data.py b/read_data.py
+--- a/read_data.py	(revision 57a1236f79c696400310f7f633942f779797c468)
++++ b/read_data.py	(date 1725536524849)
+@@ -1,14 +1,15 @@
+ import logging
++import select
+ import selectors
+ import socket
+-import time
+-import select
+ 
+ import waterball
+ from async_http_server import SimpleAsyncHttpServer
+ 
+ logger = logging.getLogger(__name__)
+ 
++app = SimpleAsyncHttpServer()
++
+ 
+ def read_data_from_url(url: str, port: int) -> str:
+     # Extract the host and path from the URL
+@@ -65,11 +66,21 @@
+     return result
+ 
+ 
++def process_message(message: str):
++    yield from waterball.sleep(3)
++    return f"Echo: {message}"
++
++
++@app.get("/api/health")
++def health_check(message: str):
++    yield from process_message(message)
++
++
+ def main():
+     yield from waterball.sleep(1)
+-    # app = SimpleAsyncHttpServer()
+-    # waterball.schedule_task(app.serve("localhost", 65432))
+-    page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
++
++    waterball.schedule_task(app.serve("localhost", 65432))
++    page_content = yield from read_data_from_url("http://localhost/api/health?message=hi", 65432)
+     print(page_content)
+ 
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"ed12930e-a6be-4033-bdf7-44160b8fd207\" name=\"Changes\" comment=\"\">\n      <change afterPath=\"$PROJECT_DIR$/requirements.txt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/.gitignore\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/asyncio-from-scratch.iml\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/modules.xml\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/core.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/core.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/read_data.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/read_data.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/stats.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/stats.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/waterball.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/waterball.py\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 6\n}</component>\n  <component name=\"ProjectId\" id=\"2leHtO0Wkd1qBDcAqsdJvye5eSe\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"Python.read_data.executor\": \"Run\",\n    \"Python.stats.executor\": \"Run\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"settings.editor.selected.configurable\": \"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RunManager\" selected=\"Python.read_data\">\n    <configuration name=\"read_data\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"asyncio-from-scratch\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/read_data.py\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"stats\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"asyncio-from-scratch\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/stats.py\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <list>\n      <item itemvalue=\"Python.read_data\" />\n      <item itemvalue=\"Python.stats\" />\n    </list>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Python.read_data\" />\n        <item itemvalue=\"Python.stats\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241\" />\n        <option value=\"bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"ed12930e-a6be-4033-bdf7-44160b8fd207\" name=\"Changes\" comment=\"\" />\n      <created>1725533837167</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1725533837167</updated>\n      <workItem from=\"1725533838123\" duration=\"83000\" />\n      <workItem from=\"1725533927057\" duration=\"2200000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\n    <SUITE FILE_PATH=\"coverage/asyncio_from_scratch$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1725502041856\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/asyncio_from_scratch$core.coverage\" NAME=\"core Coverage Results\" MODIFIED=\"1725443561153\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/asyncio_from_scratch$services.coverage\" NAME=\"services Coverage Results\" MODIFIED=\"1725511729602\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/asyncio_from_scratch$stats.coverage\" NAME=\"stats Coverage Results\" MODIFIED=\"1725534312153\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/asyncio_from_scratch$waterball.coverage\" NAME=\"waterball Coverage Results\" MODIFIED=\"1725443568650\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/asyncio_from_scratch$read_data.coverage\" NAME=\"read_data Coverage Results\" MODIFIED=\"1725536090010\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 57a1236f79c696400310f7f633942f779797c468)
++++ b/.idea/workspace.xml	(date 1725536533275)
+@@ -4,15 +4,12 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="ed12930e-a6be-4033-bdf7-44160b8fd207" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/asyncio-from-scratch.iml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
++    <list default="true" id="ed12930e-a6be-4033-bdf7-44160b8fd207" name="Changes" comment=":sparkles: run_until_complete">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/async_http_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/async_http_server.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/core.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/read_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/read_data.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/stats.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/waterball.py" beforeDir="false" afterPath="$PROJECT_DIR$/waterball.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -118,19 +115,32 @@
+       <option name="presentableId" value="Default" />
+       <updated>1725533837167</updated>
+       <workItem from="1725533838123" duration="83000" />
+-      <workItem from="1725533927057" duration="2200000" />
++      <workItem from="1725533927057" duration="2602000" />
++    </task>
++    <task id="LOCAL-00001" summary=":sparkles: run_until_complete">
++      <option name="closed" value="true" />
++      <created>1725536287636</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1725536287636</updated>
+     </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value=":sparkles: run_until_complete" />
++    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: run_until_complete" />
++  </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/asyncio_from_scratch$main.coverage" NAME="main Coverage Results" MODIFIED="1725502041856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/asyncio_from_scratch$core.coverage" NAME="core Coverage Results" MODIFIED="1725443561153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/asyncio_from_scratch$services.coverage" NAME="services Coverage Results" MODIFIED="1725511729602" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/asyncio_from_scratch$stats.coverage" NAME="stats Coverage Results" MODIFIED="1725534312153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/asyncio_from_scratch$waterball.coverage" NAME="waterball Coverage Results" MODIFIED="1725443568650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/asyncio_from_scratch$read_data.coverage" NAME="read_data Coverage Results" MODIFIED="1725536090010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/asyncio_from_scratch$read_data.coverage" NAME="read_data Coverage Results" MODIFIED="1725536526173" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+   </component>
+ </project>
+\ No newline at end of file

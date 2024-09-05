@@ -5,7 +5,6 @@ import logging
 from datetime import datetime, timedelta
 
 import waterball
-from stats import Stats
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +20,6 @@ class EventLoop:
         self._scheduled = []
         self._ready = []
         self.running = False
-        self._stats = Stats()
 
     def schedule_task(self, task):
         self.call_soon(task.step)
@@ -65,9 +63,7 @@ class EventLoop:
             self._process_events(events)
             if len(self._ready) != 0:
                 callback, args = self._ready.pop()
-                self._stats.start_task_step(callback.__name__)
                 callback(*args)
-                self._stats.end_task_step(callback.__name__)
 
     def stop(self):
         logger.info('Stop Event Loop')

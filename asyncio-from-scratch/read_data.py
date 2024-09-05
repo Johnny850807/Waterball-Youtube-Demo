@@ -1,13 +1,13 @@
 import logging
+import select
 import selectors
 import socket
-import time
-import select
 
 import waterball
 from async_http_server import SimpleAsyncHttpServer
 
 logger = logging.getLogger(__name__)
+app = SimpleAsyncHttpServer()
 
 
 def read_data_from_url(url: str, port: int) -> str:
@@ -65,9 +65,17 @@ def read_data_from_url(url: str, port: int) -> str:
     return result
 
 
+@app.get("/stop_server")
+def index():
+    yield from waterball.sleep(3)
+    logger.debug("Stopping server")
+    yield from app.stop() # TODO: didn't work
+    logger.debug("Server stopped")
+    return "Server stopped"
+
+
 def main():
-    yield from waterball.sleep(1)
-    # app = SimpleAsyncHttpServer()
+    # yield from waterball.sleep(1)
     # waterball.schedule_task(app.serve("localhost", 65432))
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     print(page_content)

@@ -15,6 +15,7 @@ class SimpleAsyncHttpServer:
         self.running = False
         self._selector = None
         self._server_socket = None
+        self._stopping_server_future = None
 
     def accept_connection(self, server_socket):
         client_socket, addr = server_socket.accept()
@@ -29,7 +30,7 @@ class SimpleAsyncHttpServer:
             data = client_socket.recv(4096)
 
             request_lines = data.splitlines()
-            request_line = request_lines[0].decode('utf-8')
+            request_line = request_lines[0]
             print(request_line)
             headers = {}
             body = None
@@ -39,23 +40,23 @@ class SimpleAsyncHttpServer:
 
             # 解析 headers
             for i in range(len(request_lines[1:])):
-                line = request_lines[i+1].decode('utf-8').strip()
-                if line == '':
+                line = request_lines[i + 1]
+                if len(line) == 0:
                     # 空行代表 headers 結束，緊接著是 body
                     body_start_index = i + 1
-                    body = '\n'.join(request_lines[body_start_index:])
+                    body = '\n'.join([l.decode('utf-8') for l in request_lines[body_start_index:]])
                     print("")
                     break
                 print(line)
-                header_key, header_value = line.split(": ", 1)
+                header_key, header_value = line.decode('utf-8').split(": ", 1)
                 headers[header_key] = header_value
             if data:
-                handler = self.routes[path]
+                handler = self.routes[path.decode('utf-8')]
 
                 if inspect.isgeneratorfunction(handler):
-                    response_lines = yield from handler(headers, body)
+                    response_lines = yield from handler()
                 else:
-                    response_lines = handler(headers, body)
+                    response_lines = handler()
 
                 response = (
                         "HTTP/1.1 200 OK\r\n"
@@ -104,6 +105,7 @@ class SimpleAsyncHttpServer:
                     else:
                         yield from self.handle_client(key.fileobj)
                 yield from Future(result=True)
+            self._stopping_server_future.set_result(True)
         except KeyboardInterrupt:
             print("Server stopped by user")
         finally:
@@ -116,3 +118,8 @@ class SimpleAsyncHttpServer:
             return func
 
         return decorator
+
+    def stop(self):
+        self._stopping_server_future = Future()
+        self.running = False
+        yield from self._stopping_server_future
