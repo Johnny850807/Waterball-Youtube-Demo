@@ -8,6 +8,7 @@ import waterball
 from async_http_server import SimpleAsyncHttpServer
 
 logger = logging.getLogger(__name__)
+app = SimpleAsyncHttpServer()
 
 
 def read_data_from_url(url: str, port: int) -> str:
@@ -64,10 +65,13 @@ def read_data_from_url(url: str, port: int) -> str:
     yield from future
     return result
 
+@app.get("/")
+def index():
+    yield from waterball.sleep(3)
+    return "Hello"
 
 def main():
     yield from waterball.sleep(1)
-    app = SimpleAsyncHttpServer()
     waterball.create_task(app.serve("localhost", 65432))
     page_content = yield from read_data_from_url("http://localhost", 65432)
     print(page_content)
