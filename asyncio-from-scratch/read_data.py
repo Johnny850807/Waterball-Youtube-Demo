@@ -92,16 +92,16 @@ r = random.Random()
 
 
 def read_data():
-    # yield from waterball.sleep(1)
-    # app.serve("localhost", 65432)
-    # page_content = yield from read_data_from_url("http://localhost", 65432)
-    # print(page_content)
     yield from waterball.sleep(r.randint(0, 5))
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     return page_content
 
 
 def main():
+    yield from waterball.sleep(1)
+    app.serve("localhost", 65432)
+    page_content = yield from read_data_from_url("http://localhost", 65432)
+    print(page_content)
     coros = [read_data] * 10
     results = yield from waterball.gather(*[coro() for coro in coros])
     print(results)

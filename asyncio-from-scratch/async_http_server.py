@@ -91,4 +91,5 @@ class SimpleAsyncHttpServer:
 
     def stop(self):
         self._server_socket.close()
+        waterball.unregister(self._server_socket)
         self.running = False
