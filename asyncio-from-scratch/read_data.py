@@ -30,18 +30,19 @@ def read_data_from_url(url: str, port: int) -> str:
     f.setblocking(False)  # Non-blocking mode
 
     f.connect_ex((host, port))  # Non-blocking connect (use connect_ex to avoid blocking)
+    
+    name = f"Read data #{_increment_num_read_data_task()}"
 
-    # 使用 select 監控可寫的狀態
-    _, writable, _ = select.select([], [f], [], 5)  # 5 秒超時
-    if writable:
-        # 檢查 socket 狀態是否有錯誤
-        err = f.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
-        if err == 0:
-            print("連線成功")
-        else:
-            print(f"連線失敗，錯誤碼: {err}")
-    else:
-        print("連線超時")
+    connected_future = waterball.Future()
+    
+    def on_connected():
+        nonlocal connected_future
+        connected_future.set_result(None)
+        waterball.unregister(f)
+
+    waterball.register(f, selectors.EVENT_WRITE, on_connected, name)  # 註冊 f 的可讀事件
+
+    yield from connected_future
 
     # Create the HTTP GET request
     request = f"GET {path} HTTP/1.1\nHost: {host}\nConnection: close\n\n"
@@ -51,12 +52,11 @@ def read_data_from_url(url: str, port: int) -> str:
     logger.debug(f"Connection opened.")
 
     # 開始讀取回應    
-    future = waterball.Future()
-
+    result_future = waterball.Future()
     result = ""
 
     def receive_data():
-        nonlocal result, f
+        nonlocal result
         frame = f.recv(2)
         content = frame.decode('utf-8')
         logger.debug(f"Next frame: '{content}'")
@@ -67,12 +67,10 @@ def read_data_from_url(url: str, port: int) -> str:
         if not has_next_data:
             logger.debug("Connection closed")
             waterball.unregister(f)
-            future.set_result(result)
+            result_future.set_result(result)
 
-    name = f"Read data #{_increment_num_read_data_task()}"
     waterball.register(f, selectors.EVENT_READ, receive_data, name)  # 註冊 f 的可讀事件
-    yield from future
-    return result
+    return (yield from result_future)
 
 
 @app.get("/")
@@ -93,7 +91,7 @@ r = random.Random()
 
 
 def read_data():
-    yield from waterball.sleep(r.randint(0, 5))
+    # yield from waterball.sleep(r.randint(0, 5))
     page_content = yield from read_data_from_url("http://waterballsa.tw", 80)
     return page_content
 
@@ -103,7 +101,7 @@ def main():
     # app.serve("localhost", 65432)
     # page_content = yield from read_data_from_url("http://localhost", 65432)
     # print(page_content)
-    coros = [read_data] * 10
+    coros = [read_data] * 500
     results = yield from waterball.gather(*[coro() for coro in coros])
     print(results)
 
@@ -116,4 +114,4 @@ if __name__ == '__main__':
 
     waterball.run(main())
     # waterball.run(read_data())
-    waterball.draw_stats()
+    waterball.draw_stats(r"Read data")
