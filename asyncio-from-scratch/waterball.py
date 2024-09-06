@@ -80,6 +80,6 @@ def unregister(fileobj):
     loop.unregister(fileobj)
 
 
-def draw_stats():
+def draw_stats(task_name_regex=None):
     loop = get_event_loop()
-    loop.stats.draw()
+    loop.stats.draw(task_name_regex)
