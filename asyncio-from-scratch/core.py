@@ -34,8 +34,7 @@ class TimeHandle(Handle):
 
 class EventLoop:
     def __init__(self, selector=None) -> None:
-        selector = selector or selectors.DefaultSelector()
-        self._selector = selector
+        self._selector = selector or selectors.DefaultSelector()
         self._scheduled = []
         self._ready = collections.deque()
         self.running = False
