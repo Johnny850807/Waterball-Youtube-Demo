@@ -88,9 +88,9 @@ class EventLoop:
                     self.call_soon(handle)
             events = self._selector.select(0.001)
             self._process_events(events)
-            if len(self._ready) != 0:
+            while len(self._ready) != 0:
                 handle = self._ready.popleft()
-                self.stats.start_task_step(handle.name)
+                self.stats.plot_task_callback(handle.name)
                 handle()
 
     def stop(self):

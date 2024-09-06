@@ -79,6 +79,7 @@ def read_data_from_url(url: str, port: int) -> str:
 def index():
     return "Hello"
 
+
 @app.get("/stop_server")
 def index():
     yield from waterball.sleep(3)
@@ -98,10 +99,10 @@ def read_data():
 
 
 def main():
-    yield from waterball.sleep(1)
-    app.serve("localhost", 65432)
-    page_content = yield from read_data_from_url("http://localhost", 65432)
-    print(page_content)
+    # yield from waterball.sleep(1)
+    # app.serve("localhost", 65432)
+    # page_content = yield from read_data_from_url("http://localhost", 65432)
+    # print(page_content)
     coros = [read_data] * 10
     results = yield from waterball.gather(*[coro() for coro in coros])
     print(results)
